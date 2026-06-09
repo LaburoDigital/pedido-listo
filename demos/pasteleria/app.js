@@ -142,7 +142,7 @@ function rowToProduct(row, index) {
     gallery: [clean(row.imagen_2), clean(row.imagen_3)].filter(Boolean),
     featured,
     offer,
-    badge: offer ? "Oferta" : (featured ? "Destacado" : ""),
+    badge: clean(row.etiqueta),
     tags: splitValues(row.nota),
     layout: featured ? "featured" : "",
     order: toNumber(row.orden) || index + 1,
@@ -283,11 +283,11 @@ function renderProducts() {
   grid.innerHTML = products.map((p) => {
     const layout = p.layout || (p.featured ? "featured" : "");
     const image = primaryImage(p);
-    const badges = [
+    const badges = uniqueLabels([
       p.offer ? "Oferta" : "",
       p.featured ? "Destacado" : "",
       p.badge || ""
-    ].filter(Boolean);
+    ]);
 
     return `
       <article class="product-card ${layout}" onclick="openProductDetail('${escapeAttr(p.id)}')">
@@ -385,11 +385,11 @@ function updateDetailModal() {
     <span>${priceLabel(p)}</span>
   `;
 
-  const tags = [
+  const tags = uniqueLabels([
     p.offer ? "Oferta" : "",
     p.featured ? "Destacado" : "",
     ...(p.tags || [])
-  ].filter(Boolean);
+  ]);
 
   document.getElementById("detailTags").innerHTML = tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join("");
 

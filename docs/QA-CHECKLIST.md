@@ -65,3 +65,10 @@ Usar antes de mostrar una demo a un posible cliente.
 - [ ] `activo = NO` oculta el producto.
 - [ ] `oferta = SI` muestra etiqueta oferta y precio anterior si existe.
 - [ ] Opciones separadas por coma aparecen como botones.
+
+
+## QA adicional v0.4.1
+- [ ] No aparecen etiquetas duplicadas tipo `Oferta Oferta` o `Destacado Destacado`.
+- [ ] Un producto en oferta muestra una sola etiqueta `Oferta`.
+- [ ] Un producto destacado muestra una sola etiqueta `Destacado`.
+- [ ] Un producto oferta + destacado puede mostrar ambas, pero una sola vez cada una.
