@@ -4,6 +4,7 @@ let detailProduct = null;
 let detailQty = 1;
 let selectedOptions = {};
 let activeImage = "";
+let catalogProducts = [];
 
 const money = (value) => {
   if (value === null || value === undefined || value === "") return "";
@@ -12,9 +13,10 @@ const money = (value) => {
 
 const cartKey = () => `pedido:${APP_CONFIG.slug || APP_CONFIG.businessName || "catalogo"}`;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   applyConfig();
   loadCart();
+  await loadProducts();
   renderFilters();
   renderProducts();
   renderInfo();
@@ -73,8 +75,186 @@ function text(id, value) {
   if (el) el.textContent = value || "";
 }
 
+
+async function loadProducts() {
+  const fallbackProducts = typeof PRODUCTS !== "undefined" ? PRODUCTS : [];
+  catalogProducts = Array.isArray(fallbackProducts) ? fallbackProducts : [];
+
+  const source = typeof DATA_SOURCE !== "undefined" ? DATA_SOURCE : null;
+  if (!source || source.mode !== "sheet" || !source.csvUrl) return;
+
+  try {
+    const response = await fetch(source.csvUrl, { cache: "no-store" });
+    if (!response.ok) throw new Error(`No se pudo cargar la planilla (${response.status})`);
+
+    const csv = await response.text();
+    const rows = csvToObjects(csv);
+    const productsFromSheet = rows
+      .map(rowToProduct)
+      .filter(product => product && product.available !== false);
+
+    if (productsFromSheet.length) {
+      catalogProducts = productsFromSheet;
+      console.info(`Productos cargados desde Google Sheets: ${productsFromSheet.length}`);
+    } else {
+      console.warn("La planilla no devolvió productos válidos. Se usa products.js como respaldo.");
+    }
+  } catch (error) {
+    console.warn("No se pudo cargar Google Sheets. Se usa products.js como respaldo.", error);
+  }
+}
+
+function rowToProduct(row, index) {
+  const name = clean(row.nombre || row.producto || row.Producto);
+  if (!name) return null;
+
+  const active = toBool(row.activo, true);
+  const available = toBool(row.disponible, true);
+  if (!active || !available) return null;
+
+  const optionGroups = [];
+  const option1Name = clean(row.opciones_1_nombre);
+  const option1Values = splitValues(row.opciones_1_valores);
+  if (option1Name && option1Values.length) {
+    optionGroups.push({ id: slugify(option1Name), label: option1Name, options: option1Values });
+  }
+
+  const option2Name = clean(row.opciones_2_nombre);
+  const option2Values = splitValues(row.opciones_2_valores);
+  if (option2Name && option2Values.length) {
+    optionGroups.push({ id: slugify(option2Name), label: option2Name, options: option2Values });
+  }
+
+  const featured = toBool(row.destacado, false);
+  const offer = toBool(row.oferta, false);
+  const price = toNumber(row.precio);
+  const oldPrice = toNumber(row.precio_anterior);
+
+  return {
+    id: slugify(`${name}-${index + 1}`),
+    name,
+    category: clean(row.categoria) || "Productos",
+    short: clean(row.descripcion_corta),
+    description: clean(row.descripcion_larga) || clean(row.descripcion_corta),
+    price,
+    oldPrice,
+    image: clean(row.imagen_1),
+    gallery: [clean(row.imagen_2), clean(row.imagen_3)].filter(Boolean),
+    featured,
+    offer,
+    badge: offer ? "Oferta" : (featured ? "Destacado" : ""),
+    tags: splitValues(row.nota),
+    layout: featured ? "featured" : "",
+    order: toNumber(row.orden) || index + 1,
+    available: true,
+    optionGroups
+  };
+}
+
+function csvToObjects(csv) {
+  const rows = parseCSV(csv).filter(row => row.some(cell => String(cell).trim() !== ""));
+  if (rows.length < 2) return [];
+
+  const headers = rows[0].map(header => normalizeHeader(header));
+  return rows.slice(1).map(row => {
+    const obj = {};
+    headers.forEach((header, index) => {
+      if (header) obj[header] = row[index] ?? "";
+    });
+    return obj;
+  });
+}
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"' && inQuotes && next === '"') {
+      cell += '"';
+      i++;
+      continue;
+    }
+
+    if (char === '"') {
+      inQuotes = !inQuotes;
+      continue;
+    }
+
+    if (char === "," && !inQuotes) {
+      row.push(cell);
+      cell = "";
+      continue;
+    }
+
+    if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && next === "\n") i++;
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = "";
+      continue;
+    }
+
+    cell += char;
+  }
+
+  row.push(cell);
+  rows.push(row);
+  return rows;
+}
+
+function normalizeHeader(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "");
+}
+
+function clean(value) {
+  return String(value ?? "").trim();
+}
+
+function splitValues(value) {
+  return clean(value)
+    .split(/[;,]/)
+    .map(item => item.trim())
+    .filter(Boolean);
+}
+
+function toBool(value, defaultValue = false) {
+  const val = clean(value).toLowerCase();
+  if (!val) return defaultValue;
+  return ["si", "sí", "yes", "true", "1", "activo", "disponible"].includes(val);
+}
+
+function toNumber(value) {
+  const val = clean(value);
+  if (!val) return null;
+  const normalized = val.replace(/\./g, "").replace(",", ".").replace(/[^0-9.]/g, "");
+  const number = Number(normalized);
+  return Number.isFinite(number) ? number : null;
+}
+
+function slugify(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "producto";
+}
+
 function renderFilters() {
-  const categories = ["todos", ...new Set(PRODUCTS.filter(p => p.available !== false).map(p => p.category))];
+  const categories = ["todos", ...new Set(catalogProducts.filter(p => p.available !== false).map(p => p.category))];
   document.getElementById("filters").innerHTML = categories.map(cat => `
     <button class="filter-btn ${cat === currentCategory ? "active" : ""}" type="button" onclick="setCategory('${escapeAttr(cat)}')">
       ${cat === "todos" ? "Todo" : escapeHtml(cat)}
@@ -89,7 +269,7 @@ function setCategory(category) {
 }
 
 function renderProducts() {
-  const products = PRODUCTS
+  const products = catalogProducts
     .filter(p => p.available !== false)
     .filter(p => currentCategory === "todos" || p.category === currentCategory)
     .sort((a, b) => (a.order || 99) - (b.order || 99));
@@ -161,7 +341,7 @@ function renderOrderFields() {
 }
 
 function openProductDetail(productId) {
-  const product = PRODUCTS.find(p => p.id === productId);
+  const product = catalogProducts.find(p => p.id === productId);
   if (!product) return;
 
   detailProduct = product;
@@ -392,7 +572,7 @@ function whatsAppBaseUrl() {
 function optionSummary(options, productId = null) {
   if (!options) return "";
   const product = productId
-    ? PRODUCTS.find(p => p.id === productId)
+    ? catalogProducts.find(p => p.id === productId)
     : detailProduct;
 
   return Object.entries(options)

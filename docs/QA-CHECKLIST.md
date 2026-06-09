@@ -53,3 +53,15 @@ Usar antes de mostrar una demo a un posible cliente.
 - [ ] Funciona con servidor local.
 - [ ] `config.js` y `products.js` están separados del HTML.
 - [ ] No se tocó `app.js` sin necesidad.
+
+
+## QA específico v0.4 editable
+
+- [ ] `data-source.js` está en modo `sheet` solo donde corresponde.
+- [ ] El link CSV publicado abre desde el navegador.
+- [ ] La demo carga productos desde Google Sheets.
+- [ ] Si la planilla falla, aparece respaldo desde `products.js`.
+- [ ] Cambiar precio en Sheets se refleja al recargar la web.
+- [ ] `activo = NO` oculta el producto.
+- [ ] `oferta = SI` muestra etiqueta oferta y precio anterior si existe.
+- [ ] Opciones separadas por coma aparecen como botones.

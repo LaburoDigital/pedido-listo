@@ -1,19 +1,16 @@
-# CHANGELOG
+# CHANGELOG — Pedido Listo
 
-## v0.3
+## v0.4 — Editable por Google Sheets
+- Agregado `data-source.js` para elegir entre productos locales o Google Sheets.
+- `app.js` ahora puede cargar productos desde una hoja publicada como CSV.
+- Se mantiene `products.js` como respaldo si la planilla falla.
+- Demo de ropa conectada a la planilla publicada por el usuario.
+- Se agregan funciones para parsear CSV, normalizar columnas y transformar filas en productos.
 
-- Estructura oficial inicial del producto Pedido Listo.
-- Separación entre `template/`, `demos/` y `docs/`.
-- Plantilla base con `config.js` y `products.js`.
-- Flujo profesional: card → detalle → opciones → agregar al pedido → WhatsApp.
-- Se eliminan acciones redundantes tipo “Agregar” y “Pedir” en la misma tarjeta.
-- Se agrega demo de pastelería.
-- Se agrega demo de ropa.
-- Se agregan documentos de QA, precios, mensajes y proceso.
-
-## Decisiones de producto
-
-- El producto principal será editable por el dueño a futuro.
-- El catálogo básico queda como demo o entrada excepcional.
-- No se vende mantenimiento continuo como base.
-- Los cambios futuros se resuelven con producto editable o cotizaciones puntuales.
+## v0.3 — Base estable
+- Base separada en archivos.
+- Configuración del negocio en `config.js`.
+- Productos en `products.js`.
+- Flujo card → detalle → agregar al pedido → WhatsApp.
+- Grilla mobile para productos.
+- Documentación inicial.
