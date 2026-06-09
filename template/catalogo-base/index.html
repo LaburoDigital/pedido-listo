@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="pageTitle">Catálogo online</title>
+  <meta name="description" id="pageDescription" content="Catálogo online con pedido por WhatsApp." />
+  <meta name="theme-color" id="themeColor" content="#2a120f" />
+  <meta property="og:title" id="ogTitle" content="Catálogo online" />
+  <meta property="og:description" id="ogDescription" content="Catálogo online con pedido por WhatsApp." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar" id="topbar"></div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <span class="brand-mark" id="brandMark">LD</span>
+        <span>
+          <strong id="brandName">Catálogo</strong>
+          <small id="brandSub">Online</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#informacion">Información</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+
+      <button class="cart-pill" type="button" onclick="openCart()" aria-label="Abrir pedido">
+        <span>Pedido</span>
+        <strong id="cartCount">0</strong>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow" id="heroEyebrow">Catálogo online</span>
+        <h1 id="heroTitle">Productos listos para pedir.</h1>
+        <p id="heroText">Elegí productos, revisá los detalles y armá tu pedido por WhatsApp.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#catalogo">Ver catálogo</a>
+          <button class="btn secondary" type="button" onclick="openCart()">Ver pedido</button>
+        </div>
+        <div class="trust-row" id="trustRow"></div>
+      </div>
+
+      <div class="hero-card">
+        <img id="heroImage" alt="" />
+        <div class="hero-overlay">
+          <strong id="heroBadgeTitle">Catálogo</strong>
+          <span id="heroBadgeText">Pedido por WhatsApp</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section-head" id="catalogo">
+      <span class="section-kicker" id="catalogKicker">Catálogo</span>
+      <div class="section-title-row">
+        <div>
+          <h2 id="catalogTitle">Elegí tus productos</h2>
+          <p id="catalogText">Entrá al detalle de cada producto para ver opciones antes de agregarlo al pedido.</p>
+        </div>
+        <button class="btn compact" type="button" onclick="openCart()">Ver pedido</button>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="filters" id="filters" aria-label="Filtros de categorías"></div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <section class="wrap info-grid" id="informacion"></section>
+
+    <section class="wrap cta-panel">
+      <div>
+        <h2 id="ctaTitle">¿Ya sabés qué querés pedir?</h2>
+        <p id="ctaText">Agregá los productos al pedido, completá los datos y enviá todo junto por WhatsApp.</p>
+      </div>
+      <button class="btn light" type="button" onclick="openCart()">Ver mi pedido</button>
+    </section>
+  </main>
+
+  <footer class="footer" id="contacto">
+    <div class="wrap footer-inner">
+      <div>
+        <strong id="footerName">Catálogo</strong>
+        <p id="footerText">Pedidos y coordinación por WhatsApp.</p>
+      </div>
+      <div class="footer-links" id="footerLinks"></div>
+    </div>
+  </footer>
+
+  <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeCart()"></div>
+
+  <aside class="drawer" id="cartDrawer" aria-label="Tu pedido" aria-hidden="true">
+    <div class="drawer-header">
+      <div>
+        <span class="section-kicker">Tu pedido</span>
+        <h2>Revisá antes de enviar</h2>
+      </div>
+      <button class="icon-btn" type="button" onclick="closeCart()" aria-label="Cerrar pedido">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div id="cartItems" class="cart-items"></div>
+
+      <form class="order-form" id="orderForm">
+        <h3>Datos para coordinar</h3>
+        <div id="orderFields"></div>
+      </form>
+
+      <div class="cart-note" id="cartNote"></div>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="btn primary full" type="button" onclick="sendWhatsApp()">Enviar pedido por WhatsApp</button>
+      <button class="btn ghost full" type="button" onclick="clearCart()">Vaciar pedido</button>
+    </div>
+  </aside>
+
+  <div class="modal-backdrop" id="productBackdrop" onclick="closeProductDetail()"></div>
+
+  <section class="product-modal" id="productModal" aria-label="Detalle del producto" aria-hidden="true">
+    <button class="modal-close" type="button" onclick="closeProductDetail()" aria-label="Cerrar detalle">×</button>
+    <div class="detail-media">
+      <img id="detailImage" alt="" />
+      <div class="thumbs" id="detailThumbs"></div>
+    </div>
+    <div class="detail-info">
+      <span class="section-kicker" id="detailCategory">Producto</span>
+      <h2 id="detailName">Producto</h2>
+      <p id="detailDescription"></p>
+      <div class="price-line" id="detailPrice"></div>
+      <div class="detail-tags" id="detailTags"></div>
+
+      <div class="option-area" id="detailOptions"></div>
+
+      <div class="quantity-row">
+        <span>Cantidad</span>
+        <div class="qty-control">
+          <button type="button" onclick="changeDetailQty(-1)">−</button>
+          <strong id="detailQty">1</strong>
+          <button type="button" onclick="changeDetailQty(1)">+</button>
+        </div>
+      </div>
+
+      <button class="btn primary full" type="button" onclick="addCurrentProductToCart()">Agregar al pedido</button>
+      <button class="btn ghost full" type="button" onclick="closeProductDetail()">Seguir viendo productos</button>
+    </div>
+  </section>
+
+  <script src="config.js"></script>
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
