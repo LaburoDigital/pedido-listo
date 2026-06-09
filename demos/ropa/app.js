@@ -253,6 +253,20 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "") || "producto";
 }
 
+
+function uniqueLabels(labels) {
+  const seen = new Set();
+  return (labels || [])
+    .map(label => String(label || "").trim())
+    .filter(label => {
+      if (!label) return false;
+      const key = label.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
 function renderFilters() {
   const categories = ["todos", ...new Set(catalogProducts.filter(p => p.available !== false).map(p => p.category))];
   document.getElementById("filters").innerHTML = categories.map(cat => `

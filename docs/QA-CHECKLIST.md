@@ -72,3 +72,14 @@ Usar antes de mostrar una demo a un posible cliente.
 - [ ] Un producto en oferta muestra una sola etiqueta `Oferta`.
 - [ ] Un producto destacado muestra una sola etiqueta `Destacado`.
 - [ ] Un producto oferta + destacado puede mostrar ambas, pero una sola vez cada una.
+
+## QA específico v0.4.2
+- [ ] La consola no muestra `uniqueLabels is not defined`.
+- [ ] Google Sheets carga 5 productos o los productos activos esperados.
+- [ ] Las etiquetas no se duplican: no debe aparecer `Oferta Oferta`.
+- [ ] Un producto con `oferta=SI` y `destacado=SI` muestra una sola etiqueta Oferta y una sola Destacado.
+- [ ] El catálogo renderiza productos después de cargar desde Google Sheets.
+- [ ] Cambiar `activo` a `NO` oculta el producto.
+- [ ] Cambiar `activo` a `SI` lo vuelve a mostrar.
+- [ ] Abrir detalle, elegir opciones y agregar al pedido funciona.
+- [ ] WhatsApp genera mensaje de pedido, no consulta.

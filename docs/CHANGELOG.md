@@ -14,3 +14,9 @@
 - Flujo card → detalle → agregar al pedido → WhatsApp.
 - Grilla mobile para productos.
 - Documentación inicial.
+
+## v0.4.2
+- Corrige error crítico: `uniqueLabels is not defined`.
+- Mantiene deduplicación real de etiquetas Oferta/Destacado sin duplicados visuales.
+- Confirma que el catálogo no debe fallar aunque los productos vengan desde Google Sheets.
+- Mantiene `main` estable y esta versión debe probarse en `dev` antes de merge.
