@@ -1,22 +1,11 @@
-# CHANGELOG — Pedido Listo
+# Changelog
 
-## v0.4 — Editable por Google Sheets
-- Agregado `data-source.js` para elegir entre productos locales o Google Sheets.
-- `app.js` ahora puede cargar productos desde una hoja publicada como CSV.
-- Se mantiene `products.js` como respaldo si la planilla falla.
-- Demo de ropa conectada a la planilla publicada por el usuario.
-- Se agregan funciones para parsear CSV, normalizar columnas y transformar filas en productos.
-
-## v0.3 — Base estable
-- Base separada en archivos.
-- Configuración del negocio en `config.js`.
-- Productos en `products.js`.
-- Flujo card → detalle → agregar al pedido → WhatsApp.
-- Grilla mobile para productos.
-- Documentación inicial.
-
-## v0.4.2
-- Corrige error crítico: `uniqueLabels is not defined`.
-- Mantiene deduplicación real de etiquetas Oferta/Destacado sin duplicados visuales.
-- Confirma que el catálogo no debe fallar aunque los productos vengan desde Google Sheets.
-- Mantiene `main` estable y esta versión debe probarse en `dev` antes de merge.
+## v0.6.0 — Compra usable y layout estable
+- Reemplaza el modal gigante de producto por un panel lateral compacto de compra.
+- Prioriza el flujo: ver detalle → elegir talle/color → agregar al pedido.
+- Mantiene visible el botón Agregar al pedido en pantallas bajas.
+- Reduce escala general de hero, cards, títulos, botones, carrito y detalle.
+- Mantiene grilla uniforme sin cards gigantes ni agujeros.
+- Oculta secciones comerciales inferiores innecesarias en la demo de ropa.
+- No toca Google Sheets, data-source.js, config.js ni products.js.
+- Mantiene la regla: agregar producto no abre automáticamente el carrito.

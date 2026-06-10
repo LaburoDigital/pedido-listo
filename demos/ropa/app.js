@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   applyConfig();
   loadCart();
   await loadProducts();
+  syncCartWithCatalog();
   renderFilters();
   renderProducts();
   renderInfo();
@@ -144,7 +145,7 @@ function rowToProduct(row, index) {
     offer,
     badge: clean(row.etiqueta),
     tags: splitValues(row.nota),
-    layout: featured ? "featured" : "",
+    layout: "",
     order: toNumber(row.orden) || index + 1,
     available: true,
     optionGroups
@@ -267,6 +268,29 @@ function uniqueLabels(labels) {
     });
 }
 
+
+function isValidOffer(product) {
+  return Boolean(product && product.offer && Number(product.oldPrice) > Number(product.price || 0));
+}
+
+function syncCartWithCatalog() {
+  const before = cart.length;
+  cart = cart
+    .map(item => {
+      const product = catalogProducts.find(p => p.id === item.id && p.available !== false);
+      if (!product) return null;
+      return {
+        ...item,
+        name: product.name,
+        price: product.price,
+        image: primaryImage(product)
+      };
+    })
+    .filter(Boolean);
+
+  if (cart.length !== before) saveCart();
+}
+
 function renderFilters() {
   const categories = ["todos", ...new Set(catalogProducts.filter(p => p.available !== false).map(p => p.category))];
   document.getElementById("filters").innerHTML = categories.map(cat => `
@@ -295,10 +319,10 @@ function renderProducts() {
   }
 
   grid.innerHTML = products.map((p) => {
-    const layout = p.layout || (p.featured ? "featured" : "");
+    const layout = "";
     const image = primaryImage(p);
     const badges = uniqueLabels([
-      p.offer ? "Oferta" : "",
+      isValidOffer(p) ? "Oferta" : "",
       p.featured ? "Destacado" : "",
       p.badge || ""
     ]);
@@ -314,7 +338,7 @@ function renderProducts() {
           <p>${escapeHtml(p.short || p.description || "")}</p>
           <div class="card-meta">
             <div>
-              ${p.oldPrice ? `<span class="old-price">${money(p.oldPrice)}</span>` : ""}
+              ${isValidOffer(p) ? `<span class="old-price">${money(p.oldPrice)}</span>` : ""}
               <span class="price">${priceLabel(p)}</span>
             </div>
             <button class="detail-link" type="button" onclick="event.stopPropagation(); openProductDetail('${escapeAttr(p.id)}')">
@@ -375,10 +399,12 @@ function openProductDetail(productId) {
 }
 
 function closeProductDetail() {
+  const modal = document.getElementById("productModal");
+  if (modal.contains(document.activeElement)) document.activeElement.blur();
   document.body.classList.remove("modal-open");
   document.getElementById("productBackdrop").classList.remove("open");
-  document.getElementById("productModal").classList.remove("open");
-  document.getElementById("productModal").setAttribute("aria-hidden", "true");
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
 }
 
 function updateDetailModal() {
@@ -395,12 +421,12 @@ function updateDetailModal() {
   text("detailQty", String(detailQty));
 
   document.getElementById("detailPrice").innerHTML = `
-    ${p.oldPrice ? `<span class="old-price">${money(p.oldPrice)}</span>` : ""}
+    ${isValidOffer(p) ? `<span class="old-price">${money(p.oldPrice)}</span>` : ""}
     <span>${priceLabel(p)}</span>
   `;
 
   const tags = uniqueLabels([
-    p.offer ? "Oferta" : "",
+    isValidOffer(p) ? "Oferta" : "",
     p.featured ? "Destacado" : "",
     ...(p.tags || [])
   ]);
@@ -467,7 +493,6 @@ function addCurrentProductToCart() {
   saveCart();
   renderCart();
   closeProductDetail();
-  window.setTimeout(openCart, 80);
 }
 
 function openCart() {
@@ -478,10 +503,12 @@ function openCart() {
 }
 
 function closeCart() {
+  const drawer = document.getElementById("cartDrawer");
+  if (drawer.contains(document.activeElement)) document.activeElement.blur();
   document.body.classList.remove("drawer-open");
   document.getElementById("drawerBackdrop").classList.remove("open");
-  document.getElementById("cartDrawer").classList.remove("open");
-  document.getElementById("cartDrawer").setAttribute("aria-hidden", "true");
+  drawer.classList.remove("open");
+  drawer.setAttribute("aria-hidden", "true");
 }
 
 function renderCart() {
