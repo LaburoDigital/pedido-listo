@@ -496,3 +496,2013 @@ button { cursor: pointer; }
   .detail-info > .btn.primary.full { left: 14px; right: 14px; bottom: calc(10px + env(safe-area-inset-bottom)); min-height: 42px; }
   .footer-inner { display: grid; gap: 8px; }
 }
+
+
+/* =========================================================
+   v0.7 — Detalle de producto como vista propia
+   Objetivo: dejar de usar "Ver detalle" como modal chico encima del catálogo.
+   El detalle pasa a sentirse como pantalla de producto: foto grande + compra clara.
+   ========================================================= */
+
+/* El fondo oscuro del modal deja de ser protagonista. La vista de producto ocupa todo. */
+.product-backdrop.open {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Vista de detalle: full screen controlado, no modal flotante. */
+.product-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  background: var(--card) !important;
+  box-shadow: none !important;
+  transform: translateX(100%) !important;
+  opacity: 1 !important;
+  display: grid !important;
+  grid-template-columns: minmax(420px, 52vw) minmax(360px, 1fr) !important;
+  overflow: hidden !important;
+  z-index: 120 !important;
+}
+
+.product-modal.open {
+  transform: translateX(0) !important;
+}
+
+/* Botón cerrar se transforma visualmente en volver. */
+.modal-close {
+  position: fixed !important;
+  top: 18px !important;
+  left: 22px !important;
+  right: auto !important;
+  z-index: 130 !important;
+  width: auto !important;
+  min-width: 104px !important;
+  height: 42px !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.92) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(33,20,22,.12) !important;
+  box-shadow: 0 10px 26px rgba(33,20,22,.14) !important;
+  font-size: 0 !important;
+}
+
+.modal-close::before {
+  content: "← Volver";
+  font-size: 14px;
+  font-weight: 900;
+}
+
+/* Galería grande y clara. */
+.detail-media {
+  position: relative !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  background: #f2efed !important;
+  overflow: hidden !important;
+}
+
+.detail-media > img,
+#detailImage {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* Miniaturas profesionales: visibles sin tapar demasiado. */
+.thumbs {
+  position: absolute !important;
+  left: 24px !important;
+  right: 24px !important;
+  bottom: 24px !important;
+  display: flex !important;
+  gap: 10px !important;
+  justify-content: center !important;
+  z-index: 3 !important;
+}
+
+.thumbs button {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 14px !important;
+  border: 2px solid rgba(255,255,255,.92) !important;
+  background: #fff !important;
+  box-shadow: 0 10px 26px rgba(33,20,22,.18) !important;
+  overflow: hidden !important;
+}
+
+.thumbs button.active {
+  border-color: var(--primary) !important;
+}
+
+/* Zona de compra: no compite con la foto, se lee rápido. */
+.detail-info {
+  height: 100dvh !important;
+  padding: 72px clamp(28px, 4vw, 58px) 26px !important;
+  overflow-y: auto !important;
+  background: #fff !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.detail-info > .kicker,
+#detailCategory {
+  color: var(--primary) !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em !important;
+  margin-bottom: 8px !important;
+}
+
+.detail-info h2,
+#detailName {
+  font-size: clamp(32px, 4.2vw, 54px) !important;
+  line-height: .96 !important;
+  letter-spacing: -.065em !important;
+  margin: 0 0 14px !important;
+  max-width: 560px !important;
+}
+
+.detail-info p,
+#detailDescription {
+  font-size: clamp(14px, 1.4vw, 18px) !important;
+  line-height: 1.45 !important;
+  color: var(--muted) !important;
+  max-width: 620px !important;
+  margin: 0 0 18px !important;
+}
+
+.price-line,
+#detailPrice {
+  margin: 4px 0 12px !important;
+  font-size: clamp(24px, 2.4vw, 34px) !important;
+  font-weight: 950 !important;
+}
+
+.detail-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 0 20px !important;
+}
+
+.detail-tags span {
+  padding: 7px 11px !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--line) !important;
+  background: #fff !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+}
+
+/* Opciones compactas. */
+.option-area {
+  margin-top: 4px !important;
+  display: grid !important;
+  gap: 18px !important;
+}
+
+.option-group strong,
+.quantity-row > span {
+  display: block !important;
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+  font-weight: 950 !important;
+}
+
+.option-buttons {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 9px !important;
+}
+
+.option-buttons button {
+  min-width: 50px !important;
+  min-height: 42px !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--line) !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+}
+
+.option-buttons button.active {
+  background: var(--primary-dark) !important;
+  color: #fff !important;
+  border-color: var(--primary-dark) !important;
+}
+
+.quantity-row {
+  margin: 20px 0 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+}
+
+.qty-control {
+  min-height: 40px !important;
+  padding: 4px !important;
+  border-radius: 999px !important;
+  background: var(--primary-soft) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  font-weight: 950 !important;
+}
+
+.qty-control button {
+  width: 32px !important;
+  height: 32px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  font-weight: 950 !important;
+}
+
+/* CTA fijo dentro de la columna de compra. */
+.detail-info > .btn.primary.full {
+  position: sticky !important;
+  bottom: 0 !important;
+  margin-top: auto !important;
+  min-height: 52px !important;
+  border-radius: 999px !important;
+  z-index: 4 !important;
+  box-shadow: 0 -18px 24px rgba(255,255,255,.92) !important;
+}
+
+.detail-info > .btn.ghost.full {
+  display: none !important;
+}
+
+/* El carrito queda como etapa separada; si se abre, tapa todo y no compite con detalle. */
+.drawer {
+  z-index: 160 !important;
+}
+
+.drawer-backdrop.open {
+  z-index: 150 !important;
+}
+
+/* Tablet: vista de producto vertical, no modal. */
+@media (max-width: 980px) {
+  .product-modal {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: min(52dvh, 460px) minmax(0, 1fr) !important;
+    transform: translateX(100%) !important;
+  }
+
+  .detail-media {
+    height: min(52dvh, 460px) !important;
+  }
+
+  .detail-info {
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 24px 22px calc(84px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .modal-close {
+    top: 14px !important;
+    left: 14px !important;
+    min-width: 96px !important;
+    height: 40px !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(28px, 8vw, 42px) !important;
+  }
+
+  .detail-info > .btn.primary.full {
+    position: fixed !important;
+    left: 18px !important;
+    right: 18px !important;
+    bottom: calc(14px + env(safe-area-inset-bottom)) !important;
+    margin: 0 !important;
+    width: auto !important;
+  }
+}
+
+/* Celular: foto grande arriba, compra abajo, botón siempre visible. */
+@media (max-width: 640px) {
+  .product-modal {
+    grid-template-rows: min(48dvh, 390px) minmax(0, 1fr) !important;
+  }
+
+  .detail-media {
+    height: min(48dvh, 390px) !important;
+  }
+
+  .detail-info {
+    padding: 18px 16px calc(82px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(28px, 10vw, 38px) !important;
+    letter-spacing: -.055em !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    font-size: 14px !important;
+    line-height: 1.38 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .price-line,
+  #detailPrice {
+    font-size: 25px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .detail-tags {
+    margin-bottom: 14px !important;
+  }
+
+  .detail-tags span {
+    font-size: 11px !important;
+    padding: 5px 9px !important;
+  }
+
+  .option-area {
+    gap: 13px !important;
+  }
+
+  .option-buttons button {
+    min-width: 46px !important;
+    min-height: 38px !important;
+    padding: 0 13px !important;
+    font-size: 13px !important;
+  }
+
+  .quantity-row {
+    margin: 14px 0 12px !important;
+  }
+
+  .thumbs {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    gap: 7px !important;
+  }
+
+  .thumbs button {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 12px !important;
+  }
+}
+
+/* Pantallas muy bajas: comprime info, pero conserva foto y botón. */
+@media (max-height: 560px) {
+  .product-modal {
+    grid-template-rows: 178px minmax(0, 1fr) !important;
+  }
+
+  .detail-media {
+    height: 178px !important;
+  }
+
+  .detail-info {
+    padding-top: 10px !important;
+  }
+
+  .detail-info p,
+  #detailDescription,
+  .detail-tags {
+    display: none !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: 22px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .price-line,
+  #detailPrice {
+    font-size: 20px !important;
+    margin-bottom: 7px !important;
+  }
+
+  .option-area {
+    gap: 8px !important;
+  }
+
+  .quantity-row {
+    margin: 8px 0 !important;
+  }
+
+  .thumbs button {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
+
+/* =========================================================
+   v0.7.1 — PDP profesional real
+   Corrige el error de v0.7.0: no más pantalla partida gigante con CTA perdido.
+   Desktop: contenedor centrado, galería izquierda, compra derecha compacta.
+   Mobile: galería arriba, compra abajo, CTA fijo solo donde aporta.
+   ========================================================= */
+
+/* La vista de producto sigue siendo una etapa separada, pero ya no ocupa mal todo el lienzo. */
+.product-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 120 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  transform: translateX(100%) !important;
+  opacity: 1 !important;
+  overflow-y: auto !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr) !important;
+  align-items: start !important;
+}
+
+.product-modal.open {
+  transform: translateX(0) !important;
+}
+
+/* Evita que el detalle parezca un modal encima del carrito. */
+.product-backdrop.open {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Desktop: layout tipo product page, no pantalla blanca vacía. */
+@media (min-width: 981px) {
+  .product-modal {
+    padding: 28px clamp(28px, 5vw, 72px) !important;
+    gap: clamp(32px, 5vw, 72px) !important;
+    background: #fff !important;
+  }
+
+  .detail-media {
+    position: sticky !important;
+    top: 28px !important;
+    height: calc(100dvh - 56px) !important;
+    min-height: 540px !important;
+    max-height: 720px !important;
+    border-radius: 24px !important;
+    background: #f3efed !important;
+    overflow: hidden !important;
+    box-shadow: 0 18px 42px rgba(33,20,22,.10) !important;
+  }
+
+  .detail-media > img,
+  #detailImage {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
+  .thumbs {
+    position: absolute !important;
+    left: 18px !important;
+    bottom: 18px !important;
+    right: auto !important;
+    display: flex !important;
+    gap: 9px !important;
+    justify-content: flex-start !important;
+    z-index: 3 !important;
+  }
+
+  .thumbs button {
+    width: 54px !important;
+    height: 54px !important;
+    border-radius: 14px !important;
+    border: 2px solid rgba(255,255,255,.95) !important;
+    background: #fff !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 24px rgba(33,20,22,.20) !important;
+  }
+
+  .thumbs button.active {
+    border-color: var(--primary) !important;
+  }
+
+  .detail-info {
+    height: auto !important;
+    min-height: calc(100dvh - 56px) !important;
+    max-width: 520px !important;
+    padding: clamp(28px, 5vh, 54px) 0 36px !important;
+    overflow: visible !important;
+    background: #fff !important;
+    display: block !important;
+  }
+
+  .detail-info > .kicker,
+  #detailCategory {
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    color: var(--primary) !important;
+    margin-bottom: 9px !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(34px, 3.4vw, 48px) !important;
+    line-height: .96 !important;
+    letter-spacing: -.058em !important;
+    margin: 0 0 12px !important;
+    max-width: 500px !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    display: block !important;
+    font-size: 15px !important;
+    line-height: 1.48 !important;
+    color: var(--muted) !important;
+    margin: 0 0 18px !important;
+    max-width: 500px !important;
+  }
+
+  .price-line,
+  #detailPrice {
+    margin: 0 0 16px !important;
+    font-size: 27px !important;
+    font-weight: 950 !important;
+  }
+
+  .detail-tags {
+    display: flex !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+    margin: 0 0 22px !important;
+  }
+
+  .detail-tags span {
+    font-size: 11px !important;
+    font-weight: 850 !important;
+    padding: 6px 10px !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+  }
+
+  .option-area {
+    display: grid !important;
+    gap: 18px !important;
+    margin-top: 0 !important;
+  }
+
+  .option-group strong,
+  .quantity-row > span {
+    display: block !important;
+    font-size: 14px !important;
+    font-weight: 950 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .option-buttons {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 9px !important;
+  }
+
+  .option-buttons button {
+    min-width: 48px !important;
+    min-height: 40px !important;
+    padding: 0 15px !important;
+    border-radius: 999px !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+  }
+
+  .quantity-row {
+    margin: 18px 0 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    max-width: 360px !important;
+  }
+
+  .qty-control {
+    min-height: 38px !important;
+    padding: 4px !important;
+    border-radius: 999px !important;
+  }
+
+  .qty-control button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  /* Error crítico corregido: CTA no va pegado abajo de una pantalla gigante. */
+  .detail-info > .btn.primary.full {
+    position: static !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    min-height: 50px !important;
+    margin: 14px 0 10px !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+  }
+
+  .detail-info > .btn.ghost.full {
+    display: inline-flex !important;
+    width: auto !important;
+    min-height: 42px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    color: var(--primary) !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+  }
+
+  .modal-close {
+    position: fixed !important;
+    top: 24px !important;
+    left: 24px !important;
+    right: auto !important;
+    z-index: 130 !important;
+    min-width: 104px !important;
+    height: 42px !important;
+    padding: 0 16px !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.94) !important;
+    border: 1px solid rgba(33,20,22,.12) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 12px 30px rgba(33,20,22,.16) !important;
+    font-size: 0 !important;
+  }
+
+  .modal-close::before {
+    content: "← Volver";
+    font-size: 14px;
+    font-weight: 900;
+  }
+}
+
+/* Tablet/mobile: PDP vertical profesional. */
+@media (max-width: 980px) {
+  .product-modal {
+    display: block !important;
+    overflow-y: auto !important;
+    background: #fff !important;
+    transform: translateX(100%) !important;
+  }
+
+  .detail-media {
+    position: relative !important;
+    height: min(58dvh, 520px) !important;
+    min-height: 330px !important;
+    width: 100% !important;
+    border-radius: 0 0 24px 24px !important;
+    background: #f3efed !important;
+    overflow: hidden !important;
+  }
+
+  .detail-media > img,
+  #detailImage {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
+  .detail-info {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 20px 18px calc(92px + env(safe-area-inset-bottom)) !important;
+    background: #fff !important;
+    display: block !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(28px, 9.2vw, 40px) !important;
+    line-height: .98 !important;
+    letter-spacing: -.055em !important;
+    margin: 0 0 10px !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    display: block !important;
+    font-size: 14px !important;
+    line-height: 1.42 !important;
+    color: var(--muted) !important;
+    margin: 0 0 14px !important;
+  }
+
+  .price-line,
+  #detailPrice {
+    font-size: 25px !important;
+    margin: 0 0 12px !important;
+  }
+
+  .detail-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 7px !important;
+    margin: 0 0 16px !important;
+  }
+
+  .detail-tags span {
+    font-size: 11px !important;
+    padding: 5px 9px !important;
+  }
+
+  .option-area {
+    gap: 15px !important;
+  }
+
+  .option-buttons button {
+    min-height: 40px !important;
+    min-width: 46px !important;
+    padding: 0 14px !important;
+    font-size: 14px !important;
+  }
+
+  .quantity-row {
+    margin: 16px 0 10px !important;
+  }
+
+  .detail-info > .btn.primary.full {
+    position: fixed !important;
+    left: 14px !important;
+    right: 14px !important;
+    bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    min-height: 52px !important;
+    border-radius: 999px !important;
+    z-index: 135 !important;
+    margin: 0 !important;
+    box-shadow: 0 -18px 26px rgba(255,255,255,.95) !important;
+  }
+
+  .detail-info > .btn.ghost.full {
+    display: none !important;
+  }
+
+  .modal-close {
+    position: fixed !important;
+    top: 12px !important;
+    left: 12px !important;
+    right: auto !important;
+    z-index: 140 !important;
+    min-width: 96px !important;
+    height: 40px !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.94) !important;
+    border: 1px solid rgba(33,20,22,.12) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 10px 24px rgba(33,20,22,.16) !important;
+    font-size: 0 !important;
+  }
+
+  .modal-close::before {
+    content: "← Volver";
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .thumbs {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    gap: 8px !important;
+    justify-content: center !important;
+  }
+
+  .thumbs button {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 13px !important;
+  }
+}
+
+/* Celulares bajos: evitar perder el flujo de compra. */
+@media (max-width: 640px) and (max-height: 680px) {
+  .detail-media {
+    height: 44dvh !important;
+    min-height: 240px !important;
+  }
+
+  .detail-info {
+    padding-top: 16px !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: 28px !important;
+  }
+}
+
+/* DevTools/pantallas muy bajas: prioriza interacción, no estética. */
+@media (max-height: 520px) {
+  .detail-media {
+    height: 210px !important;
+    min-height: 210px !important;
+  }
+
+  .detail-info p,
+  #detailDescription,
+  .detail-tags {
+    display: none !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: 22px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .price-line,
+  #detailPrice {
+    font-size: 20px !important;
+  }
+}
+
+
+/* =========================================================
+   v0.7.2 — Pulido profesional de controles y scroll
+   Investigación aplicada:
+   - CTA primario claro y consistente.
+   - Cerrar/volver menos invasivo.
+   - Links sociales con estilo real, no links crudos.
+   - Scroll estable: evita movimiento raro de sticky + full viewport.
+   ========================================================= */
+
+/* Botones base: menos "burbuja pesada", más e-commerce limpio */
+.btn,
+.cart-pill,
+.icon-btn,
+.modal-close,
+.filter-btn,
+.option-buttons button,
+.qty-control button,
+.remove-btn {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn {
+  min-height: 44px !important;
+  padding: 0 18px !important;
+  border-radius: 12px !important;
+  font-size: 13px !important;
+  letter-spacing: -.01em !important;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease !important;
+}
+
+.btn:active,
+.cart-pill:active,
+.icon-btn:active,
+.modal-close:active {
+  transform: translateY(1px) !important;
+}
+
+.btn.primary {
+  background: var(--primary-dark) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 24px rgba(20,16,32,.14) !important;
+}
+
+.btn.primary:hover {
+  box-shadow: 0 14px 30px rgba(20,16,32,.18) !important;
+}
+
+.btn.ghost {
+  border: 1px solid var(--line) !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+}
+
+/* Header/cart: pill más limpio */
+.cart-pill {
+  height: 36px !important;
+  min-width: 86px !important;
+  padding: 0 13px !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+}
+
+.cart-pill span:last-child,
+.cart-count {
+  min-width: 22px !important;
+  height: 22px !important;
+  border-radius: 999px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  background: var(--primary) !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  font-weight: 950 !important;
+}
+
+/* Volver: menos gigante, mejor integrado */
+@media (min-width: 981px) {
+  .modal-close {
+    top: 18px !important;
+    left: clamp(18px, 3vw, 36px) !important;
+    height: 38px !important;
+    min-width: 92px !important;
+    padding: 0 13px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 22px rgba(33,20,22,.12) !important;
+  }
+
+  .modal-close::before {
+    content: "← Volver";
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  /* Product page desktop: scroll estable, sin salto raro */
+  .product-modal {
+    overscroll-behavior: contain !important;
+    scroll-behavior: auto !important;
+  }
+
+  .detail-media {
+    top: 28px !important;
+    align-self: start !important;
+  }
+
+  /* CTA cerca de la compra, sin barra flotante rara */
+  .detail-info > .btn.primary.full {
+    border-radius: 12px !important;
+    min-height: 48px !important;
+    max-width: 390px !important;
+    box-shadow: 0 10px 24px rgba(20,16,32,.13) !important;
+  }
+}
+
+/* Mobile: volver compacto y CTA fijo estilo tienda */
+@media (max-width: 980px) {
+  .modal-close {
+    top: 10px !important;
+    left: 10px !important;
+    height: 38px !important;
+    min-width: 88px !important;
+    border-radius: 12px !important;
+  }
+
+  .modal-close::before {
+    content: "← Volver";
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .detail-info > .btn.primary.full {
+    border-radius: 12px !important;
+    min-height: 50px !important;
+    box-shadow: 0 -16px 26px rgba(255,255,255,.96), 0 10px 26px rgba(20,16,32,.14) !important;
+  }
+}
+
+/* Pedido / drawer: cerrar más fino, CTA consistente */
+.drawer {
+  overscroll-behavior: contain !important;
+}
+
+.drawer-header {
+  padding: 16px 18px 12px !important;
+}
+
+.drawer-header h2 {
+  font-size: clamp(24px, 3vw, 32px) !important;
+  line-height: 1 !important;
+  letter-spacing: -.04em !important;
+  margin: 4px 0 0 !important;
+}
+
+.drawer-header .icon-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 12px !important;
+  font-size: 0 !important;
+  box-shadow: none !important;
+}
+
+.drawer-header .icon-btn::before {
+  content: "×";
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.drawer-footer .btn.primary {
+  min-height: 48px !important;
+  border-radius: 12px !important;
+}
+
+.drawer-footer .btn.ghost {
+  min-height: 44px !important;
+  border-radius: 12px !important;
+}
+
+/* Links Instagram / WhatsApp: que parezcan botones secundarios, no links sueltos */
+.footer {
+  padding: 16px 0 !important;
+}
+
+.footer-inner {
+  align-items: center !important;
+}
+
+.footer-links {
+  display: flex !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+}
+
+.footer-links a {
+  min-height: 34px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.footer-links a:hover {
+  border-color: rgba(107,77,255,.35) !important;
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+}
+
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .footer-links a {
+    min-height: 36px !important;
+  }
+}
+
+/* Evita scroll horizontal/elastic raro en detalle */
+.product-modal,
+.drawer-body,
+.detail-info {
+  scrollbar-gutter: stable !important;
+}
+
+html,
+body {
+  overscroll-behavior-x: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .product-modal,
+  .btn,
+  .cart-pill,
+  .icon-btn,
+  .modal-close {
+    transition: none !important;
+  }
+}
+
+
+/* =========================================================
+   v0.7.3 — Limpieza real de controles
+   Objetivo:
+   - Volver deja de ser un botón feo/pesado.
+   - X del pedido queda centrada.
+   - Botones de pedido/WhatsApp quedan sobrios y consistentes.
+   - El drawer deja de sentirse tosco.
+   ========================================================= */
+
+/* -----------------------------
+   Volver: patrón profesional tipo link/ghost pequeño
+   ----------------------------- */
+.modal-close {
+  width: auto !important;
+  min-width: 0 !important;
+  height: 34px !important;
+  padding: 0 10px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.72) !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(10px) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+}
+
+.modal-close::before {
+  content: "← Volver" !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 850 !important;
+  letter-spacing: -.01em !important;
+}
+
+.modal-close:hover {
+  background: rgba(255,255,255,.95) !important;
+  box-shadow: 0 8px 20px rgba(33,20,22,.08) !important;
+}
+
+@media (min-width: 981px) {
+  .modal-close {
+    top: 18px !important;
+    left: 24px !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .modal-close {
+    top: 12px !important;
+    left: 12px !important;
+    height: 34px !important;
+    padding-inline: 10px !important;
+  }
+}
+
+/* -----------------------------
+   Product page: mejor proporción visual
+   ----------------------------- */
+@media (min-width: 981px) {
+  .product-modal {
+    padding-top: 34px !important;
+    padding-bottom: 34px !important;
+  }
+
+  .detail-media {
+    border-radius: 20px !important;
+    box-shadow: none !important;
+    background: #f5f1ee !important;
+  }
+
+  .detail-info {
+    padding-top: clamp(34px, 5vh, 58px) !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(34px, 3vw, 44px) !important;
+    line-height: .98 !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    max-width: 470px !important;
+  }
+}
+
+/* -----------------------------
+   Botones de opciones: menos inflados
+   ----------------------------- */
+.option-buttons button {
+  border-radius: 12px !important;
+  min-height: 38px !important;
+  min-width: 46px !important;
+  padding-inline: 14px !important;
+  border: 1px solid #eadfda !important;
+  box-shadow: none !important;
+}
+
+.option-buttons button.active {
+  background: var(--primary-dark) !important;
+  color: #fff !important;
+  border-color: var(--primary-dark) !important;
+}
+
+/* Cantidad: centrado y limpio */
+.qty-control {
+  border-radius: 12px !important;
+  background: var(--primary-soft) !important;
+  padding: 3px !important;
+  gap: 10px !important;
+}
+
+.qty-control button {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  line-height: 1 !important;
+  font-size: 18px !important;
+}
+
+/* CTA principal del producto */
+.detail-info > .btn.primary.full {
+  border-radius: 12px !important;
+  min-height: 48px !important;
+  font-size: 14px !important;
+  box-shadow: none !important;
+}
+
+/* -----------------------------
+   Drawer del pedido: cerrar centrado y panel menos tosco
+   ----------------------------- */
+.drawer {
+  width: min(430px, 100vw) !important;
+  box-shadow: -18px 0 48px rgba(33,20,22,.18) !important;
+}
+
+.drawer-header {
+  padding: 18px 20px 14px !important;
+  align-items: center !important;
+}
+
+.drawer-header h2 {
+  font-size: clamp(26px, 3vw, 34px) !important;
+  line-height: 1 !important;
+  letter-spacing: -.045em !important;
+}
+
+/* X perfectamente centrada */
+.drawer-header .icon-btn,
+.icon-btn {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--line) !important;
+  background: #fff !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+  position: relative !important;
+}
+
+.drawer-header .icon-btn::before,
+.icon-btn::before {
+  content: "×" !important;
+  display: block !important;
+  font-size: 25px !important;
+  font-weight: 750 !important;
+  line-height: 1 !important;
+  transform: translateY(-1px) !important;
+  color: var(--ink) !important;
+}
+
+.drawer-header .icon-btn:hover,
+.icon-btn:hover {
+  background: #faf7f5 !important;
+}
+
+/* Items del pedido más limpios */
+.cart-item {
+  gap: 12px !important;
+  padding: 14px 0 !important;
+}
+
+.cart-item img {
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 14px !important;
+}
+
+.remove-btn {
+  color: var(--primary) !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  margin-left: 8px !important;
+}
+
+/* Footer del pedido: botones sobrios */
+.drawer-footer {
+  padding: 14px 18px 18px !important;
+  gap: 10px !important;
+  box-shadow: 0 -14px 28px rgba(255,255,255,.96) !important;
+}
+
+.drawer-footer .btn.primary {
+  min-height: 50px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  box-shadow: none !important;
+}
+
+.drawer-footer .btn.ghost {
+  min-height: 46px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  background: #fff !important;
+}
+
+/* -----------------------------
+   Footer social: botones chicos, consistentes
+   ----------------------------- */
+.footer-links a {
+  min-height: 32px !important;
+  padding: 0 11px !important;
+  border-radius: 10px !important;
+  border-color: #eadfda !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+  font-size: 12px !important;
+  box-shadow: none !important;
+}
+
+.footer-links a:hover {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+  border-color: rgba(107,77,255,.28) !important;
+}
+
+/* -----------------------------
+   Scroll menos raro visualmente
+   ----------------------------- */
+.product-modal {
+  scroll-padding-top: 24px !important;
+}
+
+.detail-info,
+.drawer-body,
+.product-modal {
+  overscroll-behavior: contain !important;
+}
+
+.product-modal::-webkit-scrollbar,
+.detail-info::-webkit-scrollbar,
+.drawer-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.product-modal::-webkit-scrollbar-thumb,
+.detail-info::-webkit-scrollbar-thumb,
+.drawer-body::-webkit-scrollbar-thumb {
+  background: rgba(33,20,22,.18);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Mobile: que no se coma la pantalla */
+@media (max-width: 640px) {
+  .drawer {
+    width: 100vw !important;
+  }
+
+  .drawer-header .icon-btn,
+  .icon-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+
+  .drawer-header .icon-btn::before,
+  .icon-btn::before {
+    font-size: 24px !important;
+  }
+
+  .footer-links a {
+    min-height: 34px !important;
+  }
+}
+
+
+/* =========================================================
+   v0.7.4 — Product page con scroll único
+   Problema corregido:
+   - Antes la foto y la columna de compra se sentían como capas/scrolls diferentes.
+   - Ahora el detalle funciona como una sola página: sube y baja todo junto.
+   ========================================================= */
+
+/* Un solo contenedor de scroll para el detalle completo */
+.product-modal {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+  scroll-behavior: auto !important;
+}
+
+/* Desktop: la imagen deja de ser sticky. Se mueve con la info. */
+@media (min-width: 981px) {
+  .product-modal {
+    display: grid !important;
+    grid-template-columns: minmax(420px, 1.04fr) minmax(360px, .96fr) !important;
+    align-items: start !important;
+    min-height: 100dvh !important;
+    height: 100dvh !important;
+    padding: 34px clamp(28px, 5vw, 72px) !important;
+    gap: clamp(34px, 5vw, 72px) !important;
+  }
+
+  .detail-media {
+    position: relative !important;
+    top: auto !important;
+    align-self: start !important;
+    height: min(calc(100dvh - 68px), 680px) !important;
+    min-height: 500px !important;
+    max-height: 680px !important;
+    margin: 0 !important;
+  }
+
+  .detail-info {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    align-self: start !important;
+    padding-top: clamp(26px, 5vh, 52px) !important;
+    padding-bottom: 34px !important;
+  }
+
+  /* El botón queda dentro del flujo, no como elemento pegado a otra capa */
+  .detail-info > .btn.primary.full {
+    position: static !important;
+    margin-top: 18px !important;
+  }
+}
+
+/* Evita doble scroll interno en la columna de info */
+.detail-info {
+  overflow: visible !important;
+}
+
+/* Mobile/tablet: sigue como página vertical. Solo el botón queda fijo porque ahí sí mejora compra. */
+@media (max-width: 980px) {
+  .product-modal {
+    display: block !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow-y: auto !important;
+  }
+
+  .detail-media {
+    position: relative !important;
+    top: auto !important;
+  }
+
+  .detail-info {
+    overflow: visible !important;
+  }
+}
+
+/* Pantallas muy bajas: no crear scroll doble */
+@media (max-height: 560px) and (min-width: 981px) {
+  .detail-media {
+    height: 420px !important;
+    min-height: 420px !important;
+  }
+
+  .detail-info {
+    padding-top: 20px !important;
+  }
+}
+
+
+/* =========================================================
+   v0.8.0 — Product page real, linda y estable
+   Base: vuelve desde v0.7.4 y descarta el error de v0.7.5.
+   Principios:
+   - No forzar "sin scroll" rompiendo contenido.
+   - Una sola página de detalle, no modal chico.
+   - Foto protagonista sin cortar feo.
+   - Info compacta y CTA cerca de la decisión.
+   - Desktop y mobile mantienen el estilo principal de Luna Urban.
+   ========================================================= */
+
+/* Reset de los intentos anteriores que generaban layout raro */
+.product-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 120 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(107,77,255,.08), transparent 30%),
+    linear-gradient(135deg, #fff 0%, #fbf8f5 100%) !important;
+  box-shadow: none !important;
+  transform: translateX(100%) !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+}
+
+.product-modal.open {
+  transform: translateX(0) !important;
+  pointer-events: auto !important;
+}
+
+.product-backdrop.open {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Botón volver: simple, profesional, sin burbuja pesada */
+.modal-close {
+  position: fixed !important;
+  top: 20px !important;
+  left: 20px !important;
+  z-index: 140 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  padding: 0 12px !important;
+  border: 1px solid rgba(33,20,22,.10) !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.82) !important;
+  color: var(--ink) !important;
+  box-shadow: 0 8px 24px rgba(33,20,22,.08) !important;
+  backdrop-filter: blur(12px) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+}
+
+.modal-close::before {
+  content: "← Volver" !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.modal-close:hover {
+  background: #fff !important;
+}
+
+/* Desktop: product page centrada y estable */
+@media (min-width: 981px) {
+  .product-modal {
+    display: grid !important;
+    grid-template-columns: minmax(420px, 1.05fr) minmax(360px, .95fr) !important;
+    gap: clamp(34px, 5vw, 74px) !important;
+    align-items: start !important;
+    padding: 72px clamp(46px, 7vw, 108px) 48px !important;
+  }
+
+  .detail-media {
+    position: relative !important;
+    top: auto !important;
+    align-self: start !important;
+    width: 100% !important;
+    height: min(72vh, 660px) !important;
+    min-height: 520px !important;
+    max-height: 660px !important;
+    margin: 0 !important;
+    border-radius: 24px !important;
+    background: #f4efec !important;
+    overflow: hidden !important;
+    box-shadow: 0 18px 46px rgba(33,20,22,.10) !important;
+    cursor: zoom-in !important;
+  }
+
+  .detail-media > img,
+  #detailImage {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    transition: transform .22s ease !important;
+    will-change: transform !important;
+  }
+
+  .detail-media:hover > img,
+  .detail-media:hover #detailImage {
+    transform: scale(1.055) !important;
+  }
+
+  .thumbs {
+    position: absolute !important;
+    left: 18px !important;
+    right: 18px !important;
+    bottom: 18px !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 9px !important;
+    z-index: 4 !important;
+  }
+
+  .thumbs button {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 14px !important;
+    border: 2px solid rgba(255,255,255,.92) !important;
+    background: #fff !important;
+    box-shadow: 0 10px 24px rgba(33,20,22,.18) !important;
+    overflow: hidden !important;
+  }
+
+  .thumbs button.active {
+    border-color: var(--primary) !important;
+  }
+
+  .detail-info {
+    align-self: start !important;
+    width: 100% !important;
+    max-width: 540px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 18px 0 0 !important;
+    background: transparent !important;
+    display: block !important;
+  }
+
+  .detail-info > .kicker,
+  #detailCategory {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    color: var(--primary) !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    margin: 0 0 10px !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(38px, 3.7vw, 56px) !important;
+    line-height: .94 !important;
+    letter-spacing: -.065em !important;
+    margin: 0 0 14px !important;
+    max-width: 560px !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    display: block !important;
+    font-size: 16px !important;
+    line-height: 1.48 !important;
+    color: var(--muted) !important;
+    margin: 0 0 18px !important;
+    max-width: 520px !important;
+  }
+
+  .price-line,
+  #detailPrice {
+    margin: 0 0 16px !important;
+    font-size: 28px !important;
+    font-weight: 950 !important;
+    letter-spacing: -.03em !important;
+  }
+
+  .detail-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin: 0 0 22px !important;
+  }
+
+  .detail-tags span {
+    padding: 6px 10px !important;
+    border-radius: 999px !important;
+    border: 1px solid #eadfda !important;
+    background: rgba(255,255,255,.76) !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+  }
+
+  .option-area {
+    display: grid !important;
+    gap: 18px !important;
+    margin-top: 0 !important;
+  }
+
+  .option-group strong,
+  .quantity-row > span {
+    display: block !important;
+    margin-bottom: 8px !important;
+    font-size: 14px !important;
+    font-weight: 950 !important;
+  }
+
+  .option-buttons {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 9px !important;
+  }
+
+  .option-buttons button {
+    min-width: 48px !important;
+    min-height: 40px !important;
+    padding: 0 15px !important;
+    border-radius: 12px !important;
+    border: 1px solid #eadfda !important;
+    background: rgba(255,255,255,.9) !important;
+    color: var(--ink) !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    box-shadow: none !important;
+  }
+
+  .option-buttons button.active {
+    background: var(--primary-dark) !important;
+    color: #fff !important;
+    border-color: var(--primary-dark) !important;
+  }
+
+  .quantity-row {
+    margin: 18px 0 18px !important;
+    max-width: 390px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+  }
+
+  .qty-control {
+    min-height: 38px !important;
+    padding: 3px !important;
+    border-radius: 12px !important;
+    background: var(--primary-soft) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-weight: 950 !important;
+  }
+
+  .qty-control button {
+    width: 30px !important;
+    height: 30px !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    display: grid !important;
+    place-items: center !important;
+    line-height: 1 !important;
+    font-weight: 950 !important;
+  }
+
+  .detail-info > .btn.primary.full {
+    position: static !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    min-height: 50px !important;
+    margin: 16px 0 0 !important;
+    border-radius: 14px !important;
+    background: var(--primary-dark) !important;
+    color: #fff !important;
+    box-shadow: 0 14px 32px rgba(20,16,32,.16) !important;
+    font-size: 14px !important;
+    font-weight: 950 !important;
+  }
+
+  .detail-info > .btn.ghost.full {
+    display: none !important;
+  }
+}
+
+/* Pantallas desktop bajas: mantener lindo, permitir scroll natural si hace falta */
+@media (min-width: 981px) and (max-height: 760px) {
+  .product-modal {
+    padding-top: 58px !important;
+    padding-bottom: 34px !important;
+  }
+
+  .detail-media {
+    height: min(68vh, 560px) !important;
+    min-height: 430px !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(34px, 3.2vw, 46px) !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    font-size: 14px !important;
+    line-height: 1.38 !important;
+    margin-bottom: 13px !important;
+  }
+
+  .detail-tags {
+    margin-bottom: 16px !important;
+  }
+
+  .option-area {
+    gap: 14px !important;
+  }
+
+  .quantity-row {
+    margin: 14px 0 !important;
+  }
+}
+
+/* Mobile/tablet: estilo product page normal, no forzado roto */
+@media (max-width: 980px) {
+  .product-modal {
+    display: block !important;
+    padding: 0 !important;
+    overflow-y: auto !important;
+    background: #fff !important;
+  }
+
+  .detail-media {
+    position: relative !important;
+    top: auto !important;
+    width: 100% !important;
+    height: min(54dvh, 500px) !important;
+    min-height: 330px !important;
+    border-radius: 0 0 24px 24px !important;
+    background: #f4efec !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    cursor: zoom-in !important;
+  }
+
+  .detail-media > img,
+  #detailImage {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    transition: transform .18s ease !important;
+  }
+
+  .detail-media:active > img,
+  .detail-media:active #detailImage {
+    transform: scale(1.06) !important;
+  }
+
+  .detail-info {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 20px 18px calc(90px + env(safe-area-inset-bottom)) !important;
+    background: #fff !important;
+    display: block !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(30px, 9vw, 42px) !important;
+    line-height: .96 !important;
+    letter-spacing: -.06em !important;
+    margin: 0 0 10px !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    display: block !important;
+    font-size: 14px !important;
+    line-height: 1.42 !important;
+    color: var(--muted) !important;
+    margin: 0 0 14px !important;
+  }
+
+  .price-line,
+  #detailPrice {
+    font-size: 25px !important;
+    margin: 0 0 12px !important;
+  }
+
+  .detail-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 7px !important;
+    margin: 0 0 16px !important;
+  }
+
+  .detail-tags span {
+    padding: 5px 9px !important;
+    font-size: 11px !important;
+  }
+
+  .option-area {
+    gap: 15px !important;
+  }
+
+  .option-buttons button {
+    min-height: 40px !important;
+    min-width: 46px !important;
+    border-radius: 12px !important;
+    font-size: 14px !important;
+  }
+
+  .quantity-row {
+    margin: 16px 0 12px !important;
+  }
+
+  .detail-info > .btn.primary.full {
+    position: fixed !important;
+    left: 14px !important;
+    right: 14px !important;
+    bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    min-height: 52px !important;
+    margin: 0 !important;
+    border-radius: 14px !important;
+    z-index: 135 !important;
+    box-shadow: 0 -18px 28px rgba(255,255,255,.96), 0 12px 26px rgba(20,16,32,.14) !important;
+  }
+
+  .modal-close {
+    top: 12px !important;
+    left: 12px !important;
+  }
+
+  .thumbs {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  .thumbs button {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 12px !important;
+  }
+}
+
+/* Mobile bajo: compactar sin romper */
+@media (max-width: 640px) and (max-height: 700px) {
+  .detail-media {
+    height: 46dvh !important;
+    min-height: 260px !important;
+  }
+
+  .detail-info {
+    padding-top: 16px !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(26px, 8vw, 34px) !important;
+  }
+}
+
+/* Drawer: cerrar centrado y sobrio */
+.drawer-header .icon-btn,
+.icon-btn {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  border-radius: 12px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.drawer-header .icon-btn::before,
+.icon-btn::before {
+  content: "×" !important;
+  font-size: 25px !important;
+  line-height: 1 !important;
+  font-weight: 750 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Footer social más prolijo */
+.footer-links a {
+  min-height: 32px !important;
+  padding: 0 11px !important;
+  border: 1px solid #eadfda !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.footer-links a:hover {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+}
+

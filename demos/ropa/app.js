@@ -274,7 +274,7 @@ function isValidOffer(product) {
 }
 
 function syncCartWithCatalog() {
-  const before = cart.length;
+  const before = JSON.stringify(cart);
   cart = cart
     .map(item => {
       const product = catalogProducts.find(p => p.id === item.id && p.available !== false);
@@ -283,12 +283,12 @@ function syncCartWithCatalog() {
         ...item,
         name: product.name,
         price: product.price,
-        image: primaryImage(product)
+        image: productImageForOptions(product, item.options)
       };
     })
     .filter(Boolean);
 
-  if (cart.length !== before) saveCart();
+  if (JSON.stringify(cart) !== before) saveCart();
 }
 
 function renderFilters() {
@@ -388,7 +388,7 @@ function openProductDetail(productId) {
   (product.optionGroups || []).forEach(group => {
     selectedOptions[group.id] = group.options?.[0] || "";
   });
-  activeImage = primaryImage(product);
+  activeImage = productImageForOptions(product, selectedOptions);
 
   updateDetailModal();
 
@@ -433,9 +433,9 @@ function updateDetailModal() {
 
   document.getElementById("detailTags").innerHTML = tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join("");
 
-  const images = [primaryImage(p), ...(p.gallery || [])].filter(Boolean);
-  document.getElementById("detailThumbs").innerHTML = images.map(img => `
-    <button class="${img === activeImage ? "active-thumb" : ""}" type="button" onclick="setDetailImage('${escapeAttr(img)}')" aria-label="Cambiar imagen">
+  const images = productImages(p);
+  document.getElementById("detailThumbs").innerHTML = images.map((img, index) => `
+    <button class="${img === activeImage ? "active-thumb" : ""}" type="button" onclick="setDetailImageByIndex(${index})" aria-label="${escapeAttr(thumbnailLabel(p, index))}">
       <img src="${escapeAttr(img)}" alt="" />
     </button>
   `).join("");
@@ -454,13 +454,34 @@ function updateDetailModal() {
   `).join("");
 }
 
+function setDetailImageByIndex(index) {
+  if (!detailProduct) return;
+
+  const images = productImages(detailProduct);
+  activeImage = images[index] || primaryImage(detailProduct);
+
+  const colorGroup = getColorGroup(detailProduct);
+  if (colorGroup && colorGroup.options[index]) {
+    selectedOptions[colorGroup.id] = colorGroup.options[index];
+  }
+
+  updateDetailModal();
+}
+
 function setDetailImage(url) {
+  // Compatibilidad con versiones anteriores.
   activeImage = url;
   updateDetailModal();
 }
 
 function selectOption(groupId, value) {
   selectedOptions[groupId] = value;
+
+  const colorGroup = getColorGroup(detailProduct);
+  if (colorGroup && colorGroup.id === groupId) {
+    activeImage = productImageForOptions(detailProduct, selectedOptions);
+  }
+
   updateDetailModal();
 }
 
@@ -484,7 +505,7 @@ function addCurrentProductToCart() {
       id: detailProduct.id,
       name: detailProduct.name,
       price: detailProduct.price,
-      image: primaryImage(detailProduct),
+      image: productImageForOptions(detailProduct, selectedOptions),
       qty: detailQty,
       options: { ...selectedOptions }
     });
@@ -630,8 +651,48 @@ function priceLabel(product) {
   return money(product.price);
 }
 
+function productImages(product) {
+  return [
+    product?.image,
+    ...(product?.gallery || []),
+    ...(product?.images || [])
+  ]
+    .map(img => String(img || "").trim())
+    .filter(Boolean)
+    .filter((img, index, arr) => arr.indexOf(img) === index);
+}
+
+function getColorGroup(product) {
+  return (product?.optionGroups || []).find(group => {
+    const id = String(group.id || "").toLowerCase();
+    const label = String(group.label || "").toLowerCase();
+    return id === "color" || label === "color" || label === "colores";
+  }) || null;
+}
+
+function productImageForOptions(product, options = {}) {
+  const images = productImages(product);
+  if (!images.length) return "";
+
+  const colorGroup = getColorGroup(product);
+  if (!colorGroup) return images[0];
+
+  const selectedColor = options?.[colorGroup.id] || colorGroup.options?.[0];
+  const colorIndex = (colorGroup.options || []).findIndex(option =>
+    String(option).trim().toLowerCase() === String(selectedColor || "").trim().toLowerCase()
+  );
+
+  return images[colorIndex] || images[0];
+}
+
+function thumbnailLabel(product, index) {
+  const colorGroup = getColorGroup(product);
+  const color = colorGroup?.options?.[index];
+  return color ? `Ver color ${color}` : "Cambiar imagen";
+}
+
 function primaryImage(product) {
-  return product.image || product.images?.[0] || "";
+  return productImages(product)[0] || "";
 }
 
 function loadCart() {
