@@ -2506,3 +2506,334 @@ body {
   color: var(--primary) !important;
 }
 
+
+/* =========================================================
+   v0.8.2 — Vista fullscreen equilibrada + fotos bien encuadradas
+   Objetivo:
+   - Que en pantalla completa no se vea raro o excesivamente vacío.
+   - Que la foto del producto no quede mal posicionada/cortada dentro del cuadrado.
+   - Mostrar la prenda completa de forma más profesional.
+   - Mantener el estilo Luna Urban y el flujo de compra.
+   ========================================================= */
+
+/* Nota: el aviso negro de Chrome "Para salir de pantalla completa..." es del navegador.
+   No pertenece a la web y desaparece solo. Esta versión corrige el layout debajo. */
+
+/* Desktop / fullscreen: contenido más contenido y centrado */
+@media (min-width: 981px) {
+  .product-modal {
+    grid-template-columns: minmax(440px, 0.98fr) minmax(380px, 0.82fr) !important;
+    gap: clamp(34px, 4.2vw, 62px) !important;
+    align-items: center !important;
+    padding:
+      clamp(54px, 7vh, 86px)
+      clamp(54px, 7vw, 118px)
+      clamp(40px, 6vh, 70px) !important;
+  }
+
+  .detail-media {
+    justify-self: end !important;
+    align-self: center !important;
+    width: min(100%, 660px) !important;
+    height: min(68dvh, 650px) !important;
+    min-height: 500px !important;
+    max-height: 650px !important;
+    border-radius: 24px !important;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(255,255,255,.95), rgba(246,242,239,.95) 62%, rgba(239,232,228,.95) 100%) !important;
+    box-shadow: 0 18px 46px rgba(33,20,22,.09) !important;
+    overflow: hidden !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  /* Antes usaba cover y cortaba raro. Para producto/ropa conviene contain:
+     se ve la prenda completa y no depende tanto del recorte original. */
+  .detail-media > img,
+  #detailImage {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    transform: none !important;
+    transition: transform .18s ease !important;
+  }
+
+  .detail-media:hover > img,
+  .detail-media:hover #detailImage {
+    transform: scale(1.045) !important;
+  }
+
+  .detail-info {
+    align-self: center !important;
+    max-width: 520px !important;
+    padding-top: 0 !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(36px, 3.35vw, 52px) !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    max-width: 500px !important;
+  }
+
+  /* Miniaturas sobre un borde más limpio */
+  .thumbs {
+    left: 18px !important;
+    right: 18px !important;
+    bottom: 16px !important;
+    gap: 8px !important;
+  }
+
+  .thumbs button {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 13px !important;
+    background: rgba(255,255,255,.92) !important;
+    backdrop-filter: blur(8px) !important;
+  }
+}
+
+/* Pantallas muy grandes: evita que parezca una maqueta dispersa */
+@media (min-width: 1500px) {
+  .product-modal {
+    grid-template-columns: 660px 520px !important;
+    justify-content: center !important;
+    gap: 74px !important;
+  }
+
+  .detail-media {
+    width: 660px !important;
+    height: 650px !important;
+  }
+}
+
+/* Notebooks bajos: mantiene proporción sin cortar la info */
+@media (min-width: 981px) and (max-height: 760px) {
+  .product-modal {
+    align-items: center !important;
+    padding-top: 44px !important;
+    padding-bottom: 36px !important;
+  }
+
+  .detail-media {
+    height: min(68dvh, 560px) !important;
+    min-height: 430px !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(32px, 3vw, 44px) !important;
+  }
+}
+
+/* Mobile: la foto también se muestra completa, no recortada rara */
+@media (max-width: 980px) {
+  .detail-media {
+    background:
+      radial-gradient(circle at 50% 42%, rgba(255,255,255,.96), rgba(246,242,239,.96) 64%, rgba(239,232,228,.96) 100%) !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .detail-media > img,
+  #detailImage {
+    object-fit: contain !important;
+    object-position: center center !important;
+    transform: none !important;
+  }
+
+  .detail-media:active > img,
+  .detail-media:active #detailImage {
+    transform: scale(1.04) !important;
+  }
+}
+
+
+/* =========================================================
+   v0.8.3 — Product page balanceada
+   Objetivo:
+   - Corregir la sensación rara de pantalla completa.
+   - Evitar foto gigante con demasiado aire alrededor.
+   - Hacer que el detalle parezca ficha de producto real: galería + compra.
+   - Mantener foto grande pero controlada.
+   ========================================================= */
+
+/* Desktop: módulo central, no layout disperso de pantalla completa */
+@media (min-width: 981px) {
+  .product-modal {
+    display: grid !important;
+    grid-template-columns: minmax(420px, 560px) minmax(360px, 500px) !important;
+    justify-content: center !important;
+    align-content: center !important;
+    align-items: center !important;
+    gap: clamp(34px, 4.6vw, 66px) !important;
+    padding: clamp(48px, 7vh, 76px) clamp(32px, 5vw, 80px) !important;
+    background:
+      radial-gradient(circle at 22% 12%, rgba(107,77,255,.055), transparent 32%),
+      linear-gradient(135deg, #fff 0%, #fbf8f5 100%) !important;
+  }
+
+  .detail-media {
+    width: min(100%, 560px) !important;
+    height: min(72dvh, 610px) !important;
+    min-height: 470px !important;
+    max-height: 610px !important;
+    justify-self: end !important;
+    align-self: center !important;
+    border-radius: 22px !important;
+    background: #f3efec !important;
+    box-shadow: 0 20px 48px rgba(33,20,22,.095) !important;
+    overflow: hidden !important;
+  }
+
+  /* Volvemos a cover controlado: en modelos/ropa queda más natural que contain
+     cuando las fotos son de contexto. Para fotos de producto puras, igual queda aceptable. */
+  .detail-media > img,
+  #detailImage {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    transition: transform .2s ease !important;
+  }
+
+  .detail-media:hover > img,
+  .detail-media:hover #detailImage {
+    transform: scale(1.035) !important;
+  }
+
+  .detail-info {
+    justify-self: start !important;
+    align-self: center !important;
+    width: 100% !important;
+    max-width: 500px !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(36px, 3.15vw, 48px) !important;
+    line-height: .97 !important;
+    letter-spacing: -.058em !important;
+    margin-bottom: 12px !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    font-size: 15px !important;
+    line-height: 1.45 !important;
+    max-width: 480px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .price-line,
+  #detailPrice {
+    font-size: 26px !important;
+    margin-bottom: 15px !important;
+  }
+
+  .detail-tags {
+    margin-bottom: 20px !important;
+  }
+
+  .option-area {
+    gap: 16px !important;
+  }
+
+  .quantity-row {
+    max-width: 360px !important;
+    margin: 16px 0 16px !important;
+  }
+
+  .detail-info > .btn.primary.full {
+    width: 100% !important;
+    max-width: 390px !important;
+    min-height: 50px !important;
+    border-radius: 14px !important;
+    margin-top: 14px !important;
+  }
+
+  .thumbs {
+    bottom: 16px !important;
+  }
+
+  .thumbs button {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 13px !important;
+  }
+}
+
+/* Pantalla grande: mantiene el módulo unido, no lo estira */
+@media (min-width: 1500px) {
+  .product-modal {
+    grid-template-columns: 560px 500px !important;
+    gap: 72px !important;
+  }
+
+  .detail-media {
+    width: 560px !important;
+    height: 610px !important;
+  }
+}
+
+/* Notebooks: compacta sin perder estética */
+@media (min-width: 981px) and (max-height: 760px) {
+  .product-modal {
+    padding-top: 42px !important;
+    padding-bottom: 38px !important;
+  }
+
+  .detail-media {
+    height: min(68dvh, 540px) !important;
+    min-height: 420px !important;
+  }
+
+  .detail-info h2,
+  #detailName {
+    font-size: clamp(32px, 2.9vw, 42px) !important;
+  }
+
+  .detail-info p,
+  #detailDescription {
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .detail-tags {
+    margin-bottom: 14px !important;
+  }
+
+  .option-area {
+    gap: 12px !important;
+  }
+
+  .quantity-row {
+    margin: 12px 0 !important;
+  }
+}
+
+/* Mobile: foto arriba controlada + ficha clara */
+@media (max-width: 980px) {
+  .detail-media {
+    height: min(50dvh, 460px) !important;
+    min-height: 300px !important;
+    background: #f3efec !important;
+  }
+
+  .detail-media > img,
+  #detailImage {
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+
+  .detail-info {
+    padding: 20px 18px calc(92px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
