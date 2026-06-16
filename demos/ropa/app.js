@@ -396,6 +396,8 @@ function openProductDetail(productId) {
   document.getElementById("productBackdrop").classList.add("open");
   document.getElementById("productModal").classList.add("open");
   document.getElementById("productModal").setAttribute("aria-hidden", "false");
+
+  resetProductDetailScroll();
 }
 
 function closeProductDetail() {
@@ -405,6 +407,20 @@ function closeProductDetail() {
   document.getElementById("productBackdrop").classList.remove("open");
   modal.classList.remove("open");
   modal.setAttribute("aria-hidden", "true");
+}
+
+function resetProductDetailScroll() {
+  const modal = document.getElementById("productModal");
+  const info = modal?.querySelector(".detail-info");
+  const media = modal?.querySelector(".detail-media");
+
+  // El navegador conserva el scroll anterior del detalle.
+  // Al abrir otro producto hay que volver explícitamente arriba.
+  requestAnimationFrame(() => {
+    modal?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    if (info) info.scrollTop = 0;
+    if (media) media.scrollTop = 0;
+  });
 }
 
 function updateDetailModal() {

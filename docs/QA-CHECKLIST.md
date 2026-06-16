@@ -1,124 +1,60 @@
 # QA Checklist
 
-## v0.8.3 — Product page balanceada
-- [ ] En pantalla completa, la foto y la info se ven como un módulo unido.
-- [ ] No queda demasiado aire vacío.
-- [ ] La foto no queda absurdamente grande ni dispersa.
-- [ ] Talle/color/cantidad funcionan.
-- [ ] Cambiar color cambia imagen si v0.8.1 está aplicado.
+## v0.8.4 — Reset de scroll
+- [ ] Bajar en el catálogo y abrir un producto.
+- [ ] El detalle abre arriba, mostrando nombre/foto correctamente.
+- [ ] Cerrar y abrir otro producto.
+- [ ] El segundo producto también abre arriba.
+- [ ] Cambiar color sigue cambiando imagen si v0.8.1 está aplicado.
 - [ ] Agregar al pedido funciona.
-- [ ] Pedido abre manualmente.
-- [ ] WhatsApp arma el mensaje.
-- [ ] Mobile sigue usable.
-- [ ] Sin errores rojos en consola.
-
-
-## v0.8.2 — Fotos y fullscreen
-- [ ] En pantalla normal, la foto queda bien centrada.
-- [ ] En pantalla completa, el layout no queda raro ni disperso.
-- [ ] La prenda se ve completa dentro del recuadro.
-- [ ] Las miniaturas siguen funcionando.
-- [ ] Cambiar color cambia la imagen si está aplicada v0.8.1.
-- [ ] Agregar al pedido funciona.
-- [ ] Pedido abre manualmente.
-- [ ] WhatsApp arma el mensaje.
-- [ ] Mobile sigue usable.
-- [ ] Sin errores rojos en consola.
-
-
-## v0.8.0 — Product page estable
-- [ ] Desktop: el detalle se ve como página de producto linda, no modal roto.
-- [ ] Desktop: foto grande, info clara y botón cerca de las opciones.
-- [ ] Desktop bajo: si hay scroll, es natural y no se corta nada.
-- [ ] Volver se ve limpio.
-- [ ] X del pedido está centrada.
-- [ ] Mobile: foto arriba, info abajo, botón visible.
-- [ ] Hover/tap sobre foto hace zoom suave.
-- [ ] Talle/color/cantidad funcionan.
-- [ ] Agregar al pedido funciona.
-- [ ] Agregar no abre pedido automáticamente.
-- [ ] Pedido abre manualmente.
-- [ ] WhatsApp arma el mensaje.
-- [ ] Google Sheets sigue cargando productos.
-- [ ] Sin errores rojos en consola.
-
-
-## v0.7.4 — Scroll único
-- [ ] En desktop, al hacer scroll suben foto e información como una sola página.
-- [ ] No se siente que primero sube una columna y después la otra.
-- [ ] No aparece doble barra de scroll interna en el detalle.
-- [ ] Volver funciona.
-- [ ] Talle/color/cantidad funcionan.
-- [ ] Agregar al pedido funciona.
-- [ ] Agregar no abre pedido automáticamente.
-- [ ] Pedido abre manualmente.
-- [ ] WhatsApp arma el mensaje.
-- [ ] Mobile sigue usable.
-
-
-## v0.7.3 — Limpieza de controles
-- [ ] Volver se ve como control limpio, no botón tosco.
-- [ ] X del pedido está visualmente centrada.
-- [ ] Agregar al pedido se ve sobrio.
-- [ ] Botones de talle/color/cantidad se ven consistentes.
-- [ ] Drawer del pedido se ve menos tosco.
-- [ ] WhatsApp y Vaciar pedido se ven correctos.
-- [ ] Instagram/WhatsApp del footer no parecen links sueltos.
-- [ ] Scroll del detalle no se siente raro.
-- [ ] Talle/color/cantidad funcionan.
-- [ ] Agregar no abre pedido automáticamente.
-- [ ] Pedido abre manualmente.
-- [ ] WhatsApp arma el mensaje.
-
-
-## v0.7.2 — Controles y scroll
-- [ ] Botón Volver no se ve gigante ni tosco.
-- [ ] Botón Agregar al pedido se ve profesional.
-- [ ] Botón X del pedido se ve limpio.
-- [ ] Links Instagram/WhatsApp parecen botones secundarios.
-- [ ] Scroll en detalle no hace movimientos raros en desktop.
-- [ ] Scroll en detalle no rompe mobile.
-- [ ] Talle/color/cantidad funcionan.
-- [ ] Agregar no abre pedido automáticamente.
 - [ ] Pedido abre manualmente.
 - [ ] WhatsApp arma el mensaje.
 - [ ] Sin errores rojos en consola.
 
 
-## v0.7.1 — Product page profesional
-- [ ] Desktop: la foto queda grande pero no se corta absurdamente.
-- [ ] Desktop: la info queda compacta y sin espacio blanco gigante.
-- [ ] Desktop: Agregar al pedido queda debajo de cantidad, no perdido abajo.
-- [ ] Mobile: foto arriba, info abajo, CTA fijo visible.
-- [ ] Talle/color/cantidad funcionan.
-- [ ] Agregar no abre el pedido automáticamente.
-- [ ] Pedido abre manualmente.
-- [ ] WhatsApp arma el mensaje.
-- [ ] Google Sheets carga productos.
+## v0.8.1 — Imágenes por color
+- [ ] Producto con Color: Negro, Blanco, Gris.
+- [ ] Negro muestra imagen_1.
+- [ ] Blanco muestra imagen_2.
+- [ ] Gris muestra imagen_3.
+- [ ] Tocar miniatura 2 selecciona Blanco.
+- [ ] Tocar miniatura 3 selecciona Gris.
+- [ ] Agregar al pedido guarda el color elegido.
+- [ ] Carrito muestra la imagen de la variante elegida.
+- [ ] WhatsApp incluye el color elegido.
+- [ ] Producto sin Color sigue funcionando como galería normal.
 - [ ] Sin errores rojos en consola.
 
 
-## v0.7.0 — Vista de detalle de producto
-- [ ] En desktop, Ver detalle abre una vista amplia, no un modal chico.
-- [ ] La imagen principal se ve grande y útil.
-- [ ] En celular, la imagen se ve claramente arriba.
-- [ ] Talle, color y cantidad se pueden tocar sin problemas.
-- [ ] Agregar al pedido funciona.
-- [ ] Agregar al pedido no abre automáticamente el pedido.
-- [ ] El botón Pedido abre el carrito cuando el usuario lo decide.
-- [ ] WhatsApp arma el mensaje correctamente.
-- [ ] Google Sheets sigue cargando productos.
+## Funcional
+
+- [ ] Carga productos desde Google Sheets.
 - [ ] No hay errores rojos en consola.
-
-
-## v0.6.0 — Compra usable
-- [ ] Productos cargan desde Google Sheets.
-- [ ] Grilla uniforme, sin agujeros raros.
-- [ ] Abrir producto muestra panel lateral compacto, no modal gigante.
-- [ ] En 400 × 464 se puede tocar talle, color, cantidad y Agregar al pedido.
+- [ ] No aparece `Oferta Oferta`.
+- [ ] Oferta solo aparece si `precio_anterior > precio`.
+- [ ] Producto con `activo = NO` no aparece.
+- [ ] Abrir detalle funciona.
+- [ ] Talle/color se pueden seleccionar.
+- [ ] Botón **Agregar al pedido** siempre visible y clickeable.
 - [ ] Agregar producto no abre automáticamente el carrito.
-- [ ] El contador del pedido sube correctamente.
-- [ ] Botón Pedido abre el carrito.
-- [ ] Enviar pedido por WhatsApp funciona.
-- [ ] Zoom 100%, 90% y 80% no convierten el sitio en una maqueta rara.
-- [ ] No hay errores rojos en consola.
+- [ ] Botón `Pedido` abre el drawer.
+- [ ] WhatsApp arma mensaje correctamente.
+- [ ] Carrito no conserva productos eliminados/desactivados.
+
+## Visual / Responsive
+
+- [ ] Desktop 100%.
+- [ ] Desktop 90%.
+- [ ] Desktop 80%.
+- [ ] DevTools abierto.
+- [ ] Responsive 400 × 464.
+- [ ] Mobile 375px.
+- [ ] Modal no tapa el botón de agregar.
+- [ ] Drawer no queda gigante ni como tirita.
+- [ ] Grilla sin huecos raros.
+- [ ] Hero no domina toda la pantalla.
+
+## Accesibilidad básica
+
+- [ ] Cerrar modal no deja foco atrapado.
+- [ ] Cerrar carrito no deja foco dentro de elemento oculto.
