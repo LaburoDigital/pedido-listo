@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "storeId": "catalogo-base",
+  "revision": "5525ec1c56fa46701df333d1e092c2a93303d1d7",
+  "artifactHash": "45b522c53b3482314842719eeffa278568f30795e99f53400d394f0926678261",
+  "verification": {
+    "unit": true,
+    "browser": true,
+    "visual": true
+  }
+}

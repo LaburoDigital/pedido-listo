@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "storeId": "luna-urban",
+  "revision": "5525ec1c56fa46701df333d1e092c2a93303d1d7",
+  "artifactHash": "288e8fe9741fa826f9a7ee43c13dbb026c6de8f8b4fee0fb966c463cf7fe11df",
+  "verification": {
+    "unit": true,
+    "browser": true,
+    "visual": true
+  }
+}

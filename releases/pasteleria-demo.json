@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "storeId": "pasteleria-demo",
+  "revision": "5525ec1c56fa46701df333d1e092c2a93303d1d7",
+  "artifactHash": "cbbc3a97a0996c6f1f87117972346e169d320d9b0986ad1c0923bde2f7ac23d6",
+  "verification": {
+    "unit": true,
+    "browser": true,
+    "visual": true
+  }
+}

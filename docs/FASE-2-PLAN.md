@@ -48,3 +48,6 @@ Progreso:
 - Suite ampliada: 66/66 aprobadas; cuatro flujos de navegador y cuatro raíces
   independientes aprobados. Las capturas documentan el defecto móvil preexistente
   del tema clásico; no se modificó CSS fuera del alcance.
+- Verificación completa de 5525ec1: 66/66, cuatro flujos, cuatro raíces y 18
+  comparaciones visuales aprobadas. Se generaron cuatro manifiestos locales,
+  sin publicar. No queda implementación pendiente del alcance de fase 2.

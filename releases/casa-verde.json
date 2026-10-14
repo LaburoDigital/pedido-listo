@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "storeId": "casa-verde",
+  "revision": "5525ec1c56fa46701df333d1e092c2a93303d1d7",
+  "artifactHash": "37d9a1313870b05b5c314fd5948f427faed38cfc3c5cac64683bc3131f3e8b2a",
+  "verification": {
+    "unit": true,
+    "browser": true,
+    "visual": true
+  }
+}
