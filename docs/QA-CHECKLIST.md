@@ -1,60 +1,47 @@
-# QA Checklist
+# QA Checklist — Pedido Listo v0.9.1
 
-## v0.8.4 — Reset de scroll
-- [ ] Bajar en el catálogo y abrir un producto.
-- [ ] El detalle abre arriba, mostrando nombre/foto correctamente.
-- [ ] Cerrar y abrir otro producto.
-- [ ] El segundo producto también abre arriba.
-- [ ] Cambiar color sigue cambiando imagen si v0.8.1 está aplicado.
+## Carga general
+
+- [ ] La web carga sin errores rojos en consola.
+- [ ] Los productos cargan desde Google Sheets.
+- [ ] Si Google Sheets falla, usa el respaldo local.
+- [ ] Las categorías filtran correctamente.
+
+## Producto con `modo_imagenes = color`
+
+- [ ] Las opciones de Color aparecen en la zona de compra.
+- [ ] Al tocar un color, cambia la foto principal.
+- [ ] Al tocar una miniatura de color, también cambia el color seleccionado.
+- [ ] El carrito guarda el color elegido.
+- [ ] WhatsApp manda Color, no manda Vista.
+
+## Producto con `modo_imagenes = galeria`
+
+- [ ] Las miniaturas cambian la foto principal.
+- [ ] Frente/Atrás/Detalle no aparecen como opción de compra.
+- [ ] WhatsApp no manda Vista.
+
+## Producto con `modo_imagenes = color_galeria`
+
+- [ ] Color aparece en la zona de compra, cerca de precio/talle/cantidad.
+- [ ] Frente/Atrás/Detalle aparecen como miniaturas debajo/junto a la foto.
+- [ ] Al tocar Negro, la galería muestra solo imágenes de Negro.
+- [ ] Al tocar Blanco, la galería muestra solo imágenes de Blanco.
+- [ ] Al tocar una miniatura, no cambia el color elegido.
+- [ ] Al agregar al carrito, se guarda Color y Talle.
+- [ ] WhatsApp manda Color/Talle/Cantidad, pero no manda Frente/Atrás/Detalle.
+
+## Carrito
+
 - [ ] Agregar al pedido funciona.
-- [ ] Pedido abre manualmente.
-- [ ] WhatsApp arma el mensaje.
-- [ ] Sin errores rojos en consola.
+- [ ] El carrito no se abre automáticamente al agregar.
+- [ ] Cantidades suman bien.
+- [ ] Quitar productos funciona.
+- [ ] El mensaje de WhatsApp se arma completo.
 
+## Responsive
 
-## v0.8.1 — Imágenes por color
-- [ ] Producto con Color: Negro, Blanco, Gris.
-- [ ] Negro muestra imagen_1.
-- [ ] Blanco muestra imagen_2.
-- [ ] Gris muestra imagen_3.
-- [ ] Tocar miniatura 2 selecciona Blanco.
-- [ ] Tocar miniatura 3 selecciona Gris.
-- [ ] Agregar al pedido guarda el color elegido.
-- [ ] Carrito muestra la imagen de la variante elegida.
-- [ ] WhatsApp incluye el color elegido.
-- [ ] Producto sin Color sigue funcionando como galería normal.
-- [ ] Sin errores rojos en consola.
-
-
-## Funcional
-
-- [ ] Carga productos desde Google Sheets.
-- [ ] No hay errores rojos en consola.
-- [ ] No aparece `Oferta Oferta`.
-- [ ] Oferta solo aparece si `precio_anterior > precio`.
-- [ ] Producto con `activo = NO` no aparece.
-- [ ] Abrir detalle funciona.
-- [ ] Talle/color se pueden seleccionar.
-- [ ] Botón **Agregar al pedido** siempre visible y clickeable.
-- [ ] Agregar producto no abre automáticamente el carrito.
-- [ ] Botón `Pedido` abre el drawer.
-- [ ] WhatsApp arma mensaje correctamente.
-- [ ] Carrito no conserva productos eliminados/desactivados.
-
-## Visual / Responsive
-
-- [ ] Desktop 100%.
-- [ ] Desktop 90%.
-- [ ] Desktop 80%.
-- [ ] DevTools abierto.
-- [ ] Responsive 400 × 464.
-- [ ] Mobile 375px.
-- [ ] Modal no tapa el botón de agregar.
-- [ ] Drawer no queda gigante ni como tirita.
-- [ ] Grilla sin huecos raros.
-- [ ] Hero no domina toda la pantalla.
-
-## Accesibilidad básica
-
-- [ ] Cerrar modal no deja foco atrapado.
-- [ ] Cerrar carrito no deja foco dentro de elemento oculto.
+- [ ] Mobile 375 px funciona sin cortes graves.
+- [ ] Desktop fullscreen no queda roto.
+- [ ] No hay doble scroll molesto en el detalle.
+- [ ] Al abrir un producto, el detalle arranca arriba.

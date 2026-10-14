@@ -1,5 +1,26 @@
 # Changelog
 
+## v0.9.1 — Color + vistas separadas
+
+- Agrega soporte para `modo_imagenes = color_galeria`.
+- Color queda como variante real de compra, en la zona de precio/opciones.
+- Las miniaturas quedan como vistas de imagen: Frente / Atrás / Detalle.
+- Al cambiar de color, cambia el grupo de miniaturas del color seleccionado.
+- Las vistas no se envían por WhatsApp ni aparecen como opción de compra.
+- Mantiene compatibilidad con `color` y `galeria` de v0.9.0.
+
+
+## v0.9.0 — Sistema profesional de imágenes
+- Agrega `modo_imagenes`: `color`, `galeria` o vacío/auto.
+- Agrega `posicion_imagen`: `center`, `top`, `center top`, `center 35%`, etc.
+- Agrega `ajuste_imagen`: `cover`, `contain` o vacío/auto.
+- Agrega `imagenes_labels` para nombrar miniaturas como Frente, Atrás, Detalle.
+- En `modo_imagenes=color`, las imágenes siguen el orden de los colores y cambian al seleccionar color.
+- En `modo_imagenes=galeria`, las imágenes son vistas visuales y no se envían como opción de compra.
+- Si alguien carga una opción llamada Vista/Vistas/Foto/Imagen en modo galería, se oculta como opción de compra y no va al WhatsApp.
+- Agrega placeholder si una imagen falla o está vacía.
+- Mantiene intacto Google Sheets, carrito, WhatsApp y la regla de no abrir carrito al agregar.
+
 ## v0.8.4 — Reset de scroll en detalle
 - Corrige el bug donde Ver detalle abría a mitad de la ficha del producto.
 - Cada producto nuevo empieza arriba: foto, nombre y descripción visibles.
