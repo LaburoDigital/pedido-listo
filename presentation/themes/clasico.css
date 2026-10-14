@@ -357,7 +357,7 @@ a { color: inherit; text-decoration: none; }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 18px;
   padding-bottom: 46px;
 }
@@ -471,7 +471,7 @@ a { color: inherit; text-decoration: none; }
 
 .info-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   padding: 18px 0 32px;
 }
@@ -1173,7 +1173,6 @@ a { color: inherit; text-decoration: none; }
 }
 
 .product-grid {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: clamp(16px, 1.6vw, 26px);
   align-items: start;
 }
@@ -1248,10 +1247,6 @@ a { color: inherit; text-decoration: none; }
 
 .detail-info h2 {
   font-size: clamp(2.15rem, 3.1vw, 4rem);
-}
-
-.info-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 @media (min-width: 1500px) {

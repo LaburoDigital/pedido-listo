@@ -1,5 +1,13 @@
 # Changelog
 
+## Preparación comercial — 14/10/2026
+
+- Corregida la cascada de columnas del tema clásico en móvil, sin nuevos overrides.
+- Regresión adaptable para cuatro tiendas y ocho tamaños; paridad de escritorio preservada.
+- Herramienta local de respaldo CSV y migración de IDs con siete pruebas y rechazo de equivalencias inseguras.
+- Procedimiento de migración y diagnóstico de administración en PRIMERA-ENTREGA.md y MIGRACION-IDS.md.
+- Sin cambios en Google Sheets ni publicaciones existentes; respaldo completo de la planilla pendiente de acceso.
+
 ## Fase 1 — Estabilización
 
 - Catálogo vacío válido y error con reintento; se elimina el respaldo de ejemplos en modo Sheets.

@@ -34,6 +34,7 @@ Las pruebas de navegador usan Playwright/Chromium como herramientas de desarroll
 ```powershell
 node tests/browser-shared.cjs
 node tests/browser-parity.cjs
+node tests/browser-responsive.cjs
 ```
 
 Interceptan Sheets, imágenes y WhatsApp. No modifican ni consultan la planilla real.
@@ -59,3 +60,6 @@ Ver [arquitectura, contratos y operación](docs/FASE-2-ARQUITECTURA.md),
 Stock, pagos y panel propio quedan fuera de esta fase. El dueño puede editar
 productos/precios en Sheets. Los IDs estables deben conservarse al renombrar o
 reordenar filas; la planilla original no fue modificada.
+
+Ver [preparación comercial y administración](docs/PRIMERA-ENTREGA.md) y
+[migración de IDs pendiente de autorización](docs/MIGRACION-IDS.md).

@@ -33,7 +33,9 @@ async function main(){
   let comparisons=0;
   for(const [id,old] of [['luna-urban','demos/ropa'],['pasteleria-demo','demos/pasteleria'],['catalogo-base','template/catalogo-base']]){
     buildStore(id,path.join(temp,'after',id));
-    for(const width of [1366,375]){
+    // El móvil clásico se corrigió intencionalmente: browser-responsive comprueba
+    // su nueva geometría. Conservar la referencia histórica en escritorio y ropa.
+    for(const width of id==='luna-urban'?[1366,375]:[1366]){
       const shots=[];
       for(const [label,url] of [['before',base+'/before/'+old+'/'],['after',base+'/after/'+id+'/']]){
         const context=await browser.newContext({viewport:{width,height:width===375?667:768},reducedMotion:'reduce'});

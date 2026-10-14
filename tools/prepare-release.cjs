@@ -9,7 +9,7 @@ function prepare(ids){
   if(git(root,['status','--porcelain']).trim())throw new Error('Guardá los cambios en Git antes de verificar una publicación.');
   const revision=git(root,['rev-parse','HEAD']).trim();
   const unit=fs.readdirSync(path.join(root,'tests')).filter(f=>f.endsWith('.test.cjs')).map(f=>'tests/'+f);
-  for(const args of [['--test',...unit],['tests/browser-shared.cjs'],['tests/browser-parity.cjs']]){
+  for(const args of [['--test',...unit],['tests/browser-shared.cjs'],['tests/browser-parity.cjs'],['tests/browser-responsive.cjs']]){
     const run=spawnSync(process.execPath,args,{cwd:root,stdio:'inherit',env:process.env});
     if(run.status!==0)throw new Error('Verificación fallida; no se actualizaron manifiestos.');
   }

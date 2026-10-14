@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "test": "node --test tests/*.test.cjs",
-    "test:browser": "node tests/browser-shared.cjs && node tests/browser-parity.cjs"
+    "test:browser": "node tests/browser-shared.cjs && node tests/browser-parity.cjs && node tests/browser-responsive.cjs"
   },
   "engines": { "node": ">=22" }
 }
