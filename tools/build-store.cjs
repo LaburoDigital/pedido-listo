@@ -15,6 +15,9 @@ function validateStore(store, id) {
   if (!['ropa','clasico'].includes(c.presentation?.theme) || !['uniform','mixed'].includes(c.presentation?.cardLayout) || typeof c.presentation.mediaStyles !== 'boolean' || typeof c.behavior?.openCartAfterAdd !== 'boolean') throw new Error('Presentación o comportamiento inválido.');
   for (const key of ['primary','dark','soft']) if(!/^#[a-f\d]{3}(?:[a-f\d]{3})?$/i.test(c.theme?.[key])) throw new Error('Color de tema inválido.');
   for (const key of ['seo','hero','catalog','cta','whatsappMessage']) if(!c[key] || typeof c[key]!=='object') throw new Error(`Falta configuración: ${key}`);
+  const strings = values => Array.isArray(values) && values.every(value=>typeof value==='string');
+  if(c.trust!==undefined&&!strings(c.trust))throw new Error('Lista de confianza inválida.');
+  if(c.infoCards!==undefined&&(!Array.isArray(c.infoCards)||c.infoCards.some(card=>!card||typeof card!=='object'||typeof card.title!=='string'||(card.items!==undefined&&!strings(card.items)))))throw new Error('Tarjetas informativas inválidas.');
   if (c.instagram && !/^https:\/\//.test(c.instagram)) throw new Error('Instagram debe usar HTTPS.');
   if (!['local','sheet'].includes(store.source?.mode)) throw new Error('Fuente inválida.');
   if (store.source.mode==='sheet' && !/^https:\/\//.test(store.source.csvUrl)) throw new Error('CSV debe usar HTTPS.');

@@ -1,0 +1,8 @@
+# Seleccionar esta carpeta como Package directory; base = raíz del repositorio.
+[build]
+  base = ""
+  command = "node tools/build-release.cjs catalogo-base"
+  publish = "dist/catalogo-base"
+  ignore = "node tools/ignore-build.cjs catalogo-base"
+[build.environment]
+  NODE_VERSION = "24"

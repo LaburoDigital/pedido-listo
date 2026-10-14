@@ -1,0 +1,8 @@
+# Seleccionar esta carpeta como Package directory; base = raíz del repositorio.
+[build]
+  base = ""
+  command = "node tools/build-release.cjs pasteleria-demo"
+  publish = "dist/pasteleria-demo"
+  ignore = "node tools/ignore-build.cjs pasteleria-demo"
+[build.environment]
+  NODE_VERSION = "24"

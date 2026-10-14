@@ -6,7 +6,7 @@
     "businessName": "Casa Verde",
     "businessSub": "Plantas · Demo ficticia",
     "initials": "CV",
-    "topbar": "Pedidos con anticipación · Montevideo",
+    "topbar": "Demo ficticia · No se reciben pedidos reales",
     "whatsapp": "",
     "instagram": "",
     "currency": "$",
@@ -20,49 +20,34 @@
       "description": "Tienda ficticia de plantas para probar Pedido Listo."
     },
     "hero": {
-      "eyebrow": "Pastelería artesanal a pedido",
+      "eyebrow": "Plantas de interior",
       "title": "Un rincón más verde",
       "text": "Plantas y macetas. Comercio ficticio para pruebas.",
       "image": "assets/planta.svg",
       "imageAlt": "Ilustración de una planta",
-      "badgeTitle": "Hecho a pedido",
-      "badgeText": "Tortas, boxes y opciones para eventos."
+      "badgeTitle": "Casa Verde",
+      "badgeText": "Demo ficticia"
     },
     "catalog": {
-      "kicker": "Catálogo",
-      "title": "Productos destacados",
-      "text": "Tocá un producto para ver descripción, opciones, anticipación y detalles antes de agregarlo al pedido."
+      "kicker": "Plantas",
+      "title": "Elegí tu próxima planta",
+      "text": "Comercio ficticio para comprobar la configuración independiente."
     },
     "trust": [
-      "Pedidos artesanales",
-      "Coordinación por WhatsApp",
-      "Precios finales a confirmar"
+      "Plantas de interior",
+      "Retiro a coordinar",
+      "Atención por WhatsApp"
     ],
     "infoCards": [
       {
-        "kicker": "Información",
-        "title": "Pedidos personalizados",
-        "text": "Los productos pueden adaptarse según ocasión, sabores, colores, frase, tamaño y cantidad de personas.",
-        "items": [
-          "Los precios finales pueden variar por tamaño, decoración y complejidad.",
-          "Para tortas personalizadas se recomienda pedir con 48 a 72 horas.",
-          "Para eventos o mesas dulces conviene coordinar con más anticipación."
-        ]
-      },
-      {
-        "kicker": "Cómo se coordina",
-        "title": "Pedido claro por WhatsApp",
-        "text": "El pedido llega con productos, cantidades, fecha y detalles. Así se puede responder con precio final y disponibilidad sin repetir tantas preguntas.",
-        "items": [
-          "Se confirma disponibilidad antes de reservar.",
-          "Retiro o envío se coordina según zona y horario.",
-          "Los pedidos personalizados pueden requerir seña."
-        ]
+        "kicker": "Cuidados",
+        "title": "Verde en casa",
+        "text": "Consultá los cuidados de cada planta."
       }
     ],
     "cta": {
-      "title": "¿Ya tenés una idea para tu pedido?",
-      "text": "Agregá productos, completá los detalles y enviá todo junto por WhatsApp."
+      "title": "Tu rincón verde",
+      "text": "Armá una selección de plantas."
     },
     "orderFields": [
       {
@@ -73,12 +58,12 @@
       }
     ],
     "whatsappMessage": {
-      "title": "Hola, quiero hacer un pedido con esto:",
-      "dataTitle": "Datos del pedido:",
-      "close": "¿Me pasan el precio final y me confirman si se puede hacer así para esa fecha?"
+      "title": "Selección Casa Verde",
+      "dataTitle": "Datos del pedido",
+      "close": "Quedo a la espera de confirmación."
     },
-    "cartNote": "El total final puede variar según personalización, tamaño, decoración y disponibilidad.",
-    "footerText": "Pastelería artesanal a pedido. Coordinación y confirmación final por WhatsApp.",
+    "cartNote": "Demo ficticia: WhatsApp deshabilitado.",
+    "footerText": "Casa Verde · Tienda ficticia de prueba.",
     "storageKey": "pedido:casa-verde-demo",
     "presentation": {
       "theme": "clasico",

@@ -1,3 +1,5 @@
+> Documento histórico de fase 1: las rutas de ejecución/exportación corresponden a esa versión. Ver [operación actual](FASE-2-ARQUITECTURA.md).
+
 # Fase 1 — estabilización del catálogo existente
 
 ## Alcance

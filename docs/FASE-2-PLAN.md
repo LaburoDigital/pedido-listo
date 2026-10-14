@@ -29,4 +29,22 @@ Interfaces a verificar:
 - Build -> publicación: carpeta autónoma, lista explícita, sin archivos de otros clientes.
 - Release -> build: commit exacto y huella de archivos, sin usar código pendiente.
 
-Progreso: inspección terminada; Git limpio al inicio; rama creada.
+Progreso:
+- Inspección terminada; Git limpio al inicio; rama creada.
+- 46 pruebas de fase 1 ejecutadas antes de la extracción: aprobadas.
+- Contrato y generador: pruebas inicialmente fallidas, luego aprobadas.
+- Extracción conservadora y cuatro tiendas: 48 regresiones del controlador aprobadas.
+- Comparación previa al retiro: 18 vistas, dos tamaños, aprobadas. Se corrigió
+  la sincronización de imágenes/desplazamiento de la prueba, sin cambiar el CSS.
+- Commit 4356604 conserva la extracción junto a los originales; solo después de
+  verificar se retiraron las copias. La referencia visual se obtiene desde Git.
+- Publicación fijada a commit: prueba inicialmente fallida por ausencia de función,
+  luego aprobada. Cambios no verificados y huellas alteradas no llegan al resultado.
+- Suite posterior al retiro: 65 pruebas aprobadas. Revisión final y preparación
+  de manifiestos locales pendientes de completar.
+- Revisión independiente: detectó cobertura fija de tiendas. Se corrigió el
+  descubrimiento de todas las configuraciones y la validación de colecciones UI
+  mediante prueba inicialmente fallida. Revisión de la corrección cerrada.
+- Suite ampliada: 66/66 aprobadas; cuatro flujos de navegador y cuatro raíces
+  independientes aprobados. Las capturas documentan el defecto móvil preexistente
+  del tema clásico; no se modificó CSS fuera del alcance.

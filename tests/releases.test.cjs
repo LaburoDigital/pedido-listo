@@ -19,6 +19,8 @@ test('pinned releases ignore unverified engine/store changes and reject altered 
   }
   fs.appendFileSync(path.join(repo,'engine/app.js'),'\nthrow new Error("unverified");');
   const s=path.join(repo,'stores/casa-verde/store.json');fs.writeFileSync(s,fs.readFileSync(s,'utf8').replace('Casa Verde','Unverified store'));
+  git(['add','engine','stores','releases']);git(['-c','user.name=Local test','-c','user.email=test@example.invalid','commit','-m','later unverified engine and store']);
+  const before=git(['rev-parse','HEAD']);
   for(const id of ['luna-urban','casa-verde']){
     const result=buildRelease(id,path.join(repo,'after-'+id),repo);
     assert.equal(artifactHash(result),artifactHash(path.join(repo,'before-'+id)));
@@ -28,4 +30,10 @@ test('pinned releases ignore unverified engine/store changes and reject altered 
   const manifest=path.join(repo,'releases/luna-urban.json');const m=JSON.parse(fs.readFileSync(manifest));m.artifactHash='0'.repeat(64);fs.writeFileSync(manifest,JSON.stringify(m));
   assert.throws(()=>buildRelease('luna-urban',path.join(repo,'tampered'),repo),/huella/i);
   assert.ok(!fs.existsSync(path.join(repo,'tampered')));
+  git(['add','releases/luna-urban.json']);git(['-c','user.name=Local test','-c','user.email=test@example.invalid','commit','-m','only one manifest changes']);
+  const after=git(['rev-parse','HEAD']);
+  for(const [id,expected] of [['luna-urban',1],['casa-verde',0]]){
+    const result=spawnSync(process.execPath,[path.join(root,'tools/ignore-build.cjs'),id],{cwd:repo,env:{...process.env,CACHED_COMMIT_REF:before,COMMIT_REF:after}});
+    assert.equal(result.status,expected,`${id}: only its own manifest should trigger a build`);
+  }
 });

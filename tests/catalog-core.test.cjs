@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const Core = require('../shared/catalog-core.js');
+const Core = require('../engine/core.js');
 const product = overrides => ({ id: 'p1', name: 'Producto', price: 100, image: '',
   optionGroups: [{ id: 'color', label: 'Color', options: ['Negro'] }], ...overrides });
 const item = overrides => ({ id: 'p1', name: 'Producto', price: 100, qty: 1, options: { color: 'Negro' }, ...overrides });

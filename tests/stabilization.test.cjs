@@ -5,7 +5,11 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
-const catalogs = ['demos/ropa', 'demos/pasteleria', 'template/catalogo-base'];
+const catalogs = ['luna-urban', 'pasteleria-demo', 'catalogo-base', 'casa-verde'];
+const {buildStore}=require('../tools/build-store.cjs');
+const os=require('node:os');
+const testRoot=fs.mkdtempSync(path.join(os.tmpdir(),'pedido-regression-'));
+for(const id of catalogs)buildStore(id,path.join(testRoot,id));
 function app(folder = catalogs[0]) {
   const nodes = new Map(), storage = new Map(), opened = [], alerts = [];
   function element(id) {
@@ -27,11 +31,10 @@ function app(folder = catalogs[0]) {
     window: { open: (...args) => opened.push(args), setTimeout: () => {} },
     alert: msg => alerts.push(msg)
   });
-  const core = path.join(root, 'shared/catalog-core.js');
-  if (fs.existsSync(core)) vm.runInContext(fs.readFileSync(core, 'utf8'), context);
-  for (const file of ['config.js', 'data-source.js', 'products.js', 'app.js']) {
-    vm.runInContext(fs.readFileSync(path.join(root, folder, file), 'utf8'), context);
+  for (const file of ['engine/core.js','engine/media.js','engine/sources.js','engine/catalog.js','store.js','engine/app.js']) {
+    vm.runInContext(fs.readFileSync(path.join(testRoot, folder, file), 'utf8'), context);
   }
+  vm.runInContext('const rowToProduct=(row,index)=>CatalogSources.rowToProduct(row,index,DATA_SOURCE.legacyProducts); const toNumber=CatalogCore.parsePrice; APP_CONFIG.whatsapp="59899000000";',context);
   return { run: code => vm.runInContext(code, context), context, nodes, storage, opened, alerts };
 }
 const plain = val => JSON.parse(JSON.stringify(val));
@@ -101,7 +104,7 @@ for (const folder of catalogs) {
     assert.equal(a.run('cart.length'), 1);
   });
   test(`${folder}: generated handlers never interpolate executable data`, () => {
-    const source = fs.readFileSync(path.join(root, folder, 'app.js'), 'utf8');
+    const source = fs.readFileSync(path.join(root, 'engine/app.js'), 'utf8');
     assert.doesNotMatch(source, /onclick\s*=/);
   });
   test(`${folder}: overlapping retry and checkout cannot consume price-change review`, async () => {

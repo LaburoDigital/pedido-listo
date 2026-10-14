@@ -64,3 +64,7 @@
 - Escala compacta inicial para catálogo de ropa.
 - Grilla uniforme y secciones inferiores ocultas.
 - Limpieza de carrito contra productos desactivados.
+
+## Fase 2 — arquitectura compartida
+
+Motor único; adaptadores de catálogo; cuatro configuraciones independientes; temas conservados; retiro de duplicados tras comparación visual; publicaciones fijadas a commits verificados por tienda. Sin cambios en Sheets ni despliegues.

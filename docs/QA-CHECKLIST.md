@@ -1,3 +1,5 @@
+> Fase 2: la configuración activa está en stores/<id>/store.json, los datos locales en products.json y los alias en legacy-ids.json. No duplicar las demos ni editar archivos generados. Ver [operación actual](FASE-2-ARQUITECTURA.md).
+
 # QA Checklist — Pedido Listo v0.9.1 + estabilización
 
 ## Carga general

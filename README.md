@@ -1,74 +1,61 @@
-# Pedido Listo — fase 1 de estabilización
+# Pedido Listo — fase 2
 
-Catálogos online editables para negocios que venden por Instagram y WhatsApp.
+Catálogos administrables con un motor compartido, Google Sheets y pedidos por WhatsApp.
+Cuatro tiendas configuradas: Luna Urban, pastelería, catálogo base y Casa Verde (ficticia).
 
-## Objetivo
+## Organización
 
-Crear una base reutilizable para producir catálogos mobile first con flujo profesional:
+- engine/: funcionamiento común y adaptadores de catálogo.
+- presentation/: un HTML y dos temas visuales conservados.
+- stores/<id>/: configuración, productos, IDs anteriores, recursos y Netlify.
+- tools/: generación y verificación de publicaciones por comercio.
+- releases/: revisión Git verificada de cada publicación.
+- tests/: regresiones, navegador y comparación visual contra fase 1.
+- dist/: publicaciones generadas, fuera de Git.
 
-card de producto → detalle → opciones → agregar al pedido → revisión → WhatsApp.
+## Probar sin publicar
 
-La prioridad del negocio es vender soluciones simples y útiles para negocios chicos sin quedar atados a mantenimiento manual constante. La versión principal a futuro será editable por el dueño mediante Google Sheets u otra fuente simple.
+Desde la raíz, con Node 22 o superior:
 
-## Estructura
-
-```text
-template/catalogo-base/   Plantilla madre. No editar para clientes concretos.
-demos/pasteleria/         Demo comercial para pastelería.
-demos/ropa/               Demo comercial para ropa.
-docs/                     Proceso, precios, QA, mensajes y cambios.
-shared/catalog-core.js    Validación común de datos, carritos y carga CSV.
-tests/                    Regresiones automatizadas y comprobación de navegador.
-tools/export-catalog.cjs  Exportación independiente con todas las dependencias.
-```
-
-## Regla operativa
-
-- No editar `template/catalogo-base` para un cliente real.
-- Duplicar la plantilla o una demo y adaptar `config.js` y `products.js`.
-- No prometer pagos, stock real, panel admin ni SEO garantizado si no está construido.
-- No usar links gratis como cara final frente a clientes; usar dominio/subdominio profesional cuando se publique.
-
-## Cómo probar localmente
-
-Desde la raíz de `pedido-listo` (no desde una demo, porque el motor compartido está en `shared/`):
-
-```bash
-python -m http.server 8000
-```
-
-Abrir:
-
-```text
-http://localhost:8000/demos/ropa/
-http://localhost:8000/demos/pasteleria/
-http://localhost:8000/template/catalogo-base/
-```
-
-También se puede abrir `index.html` con doble clic para una revisión rápida, pero el servidor local es mejor.
-
-## Exportar un catálogo independiente
-
-Desde la raíz del proyecto, elegí una carpeta de destino nueva:
-
-```bash
-node tools/export-catalog.cjs demos/ropa ../outputs/ropa-fase-1
-```
-
-La exportación incluye el motor compartido y ajusta su ruta. Se puede servir desde la carpeta exportada. No se sobrescriben destinos existentes y no se publica nada. Para adaptar un comercio, trabajá sobre una exportación completa o mantené la estructura del repositorio; no copies solo la carpeta de una demo.
-
-## Pruebas
-
-```bash
+```powershell
+node tools/build-store.cjs luna-urban
+node tools/build-store.cjs pasteleria-demo
+node tools/build-store.cjs catalogo-base
+node tools/build-store.cjs casa-verde
 node --test tests/*.test.cjs
 ```
 
-Solo requieren Node.js y no acceden a la planilla real. La prueba adicional de navegador requiere Playwright y un Chromium disponible:
+Cada carpeta dist/<id> es autónoma y debe servirse por HTTP local.
+Usar un destino nuevo en cada generación; el comando no sobrescribe carpetas.
+El generador no despliega. No editar archivos generados.
 
-```bash
-node tests/browser-smoke.cjs
+Las pruebas de navegador usan Playwright/Chromium como herramientas de desarrollo:
+
+```powershell
+node tests/browser-shared.cjs
+node tests/browser-parity.cjs
 ```
 
-Si Playwright no encuentra un navegador instalado, configurá `PLAYWRIGHT_CHROMIUM_EXECUTABLE` con la ruta de Chromium/Chrome. `--live` agrega una lectura de comprobación de la planilla real; nunca la edita ni envía pedidos. Los pedidos de las pruebas se interceptan.
+Interceptan Sheets, imágenes y WhatsApp. No modifican ni consultan la planilla real.
+Los sitios publicados no necesitan dependencias npm ni servicios de pago.
 
-Ver [FASE-1-ESTABILIZACION.md](docs/FASE-1-ESTABILIZACION.md) para contratos de datos, migración y límites.
+## Agregar un comercio
+
+Copiar solo configuración/datos/recursos de stores/catalogo-base, con otro id y
+clave de carrito. No duplicar engine ni presentation. Seleccionar tema y fuente.
+Cada tienda nueva se descubre automáticamente en las pruebas de navegador.
+
+## Actualizar una publicación
+
+Guardar cambios en Git y ejecutar tools/prepare-release.cjs con los IDs explícitos.
+El comando ejecuta la suite completa y fija la revisión probada de esas tiendas.
+tools/build-release.cjs reconstruye desde esa revisión y verifica su huella.
+Los manifiestos de otras tiendas permanecen sin cambios. No se publica nada
+desde estos comandos; una publicación real requiere autorización.
+
+Ver [arquitectura, contratos y operación](docs/FASE-2-ARQUITECTURA.md),
+[plan y decisiones](docs/FASE-2-PLAN.md) y [antecedentes de fase 1](docs/FASE-1-ESTABILIZACION.md).
+
+Stock, pagos y panel propio quedan fuera de esta fase. El dueño puede editar
+productos/precios en Sheets. Los IDs estables deben conservarse al renombrar o
+reordenar filas; la planilla original no fue modificada.

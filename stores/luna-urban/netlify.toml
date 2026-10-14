@@ -1,0 +1,8 @@
+# Seleccionar esta carpeta como Package directory; base = raíz del repositorio.
+[build]
+  base = ""
+  command = "node tools/build-release.cjs luna-urban"
+  publish = "dist/luna-urban"
+  ignore = "node tools/ignore-build.cjs luna-urban"
+[build.environment]
+  NODE_VERSION = "24"

@@ -65,3 +65,10 @@ test('invalid client configuration is rejected before creating any output',()=>{
   s.config.presentation.theme='../ropa';fs.writeFileSync(file,JSON.stringify(s));
   const out=path.join(temporary,'site');assert.throws(()=>buildStore('casa-verde',out,temporary),/Presentación/);assert.ok(!fs.existsSync(out));
 });
+test('configuration cannot pass validation with collections that crash the UI',()=>{
+  const {validateStore}=require('../tools/build-store.cjs');
+  const original=JSON.parse(fs.readFileSync(path.join(root,'stores/casa-verde/store.json')));
+  for(const mutate of [c=>c.trust='text',c=>c.infoCards='text',c=>c.infoCards=[{title:'Card',items:'text'}],c=>c.orderFields=[{id:'name',type:'select',label:'Name',options:'text'}]]){
+    const store=structuredClone(original);mutate(store.config);assert.throws(()=>validateStore(store,'casa-verde'),/inválid/i);
+  }
+});

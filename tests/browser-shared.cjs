@@ -8,7 +8,9 @@ const repo = path.resolve(__dirname, '..');
 const os=require('node:os');
 const {buildStore}=require('../tools/build-store.cjs');
 const root=fs.mkdtempSync(path.join(os.tmpdir(),'pedido-browser-'));
-for(const id of ['luna-urban','pasteleria-demo','catalogo-base','casa-verde'])buildStore(id,path.join(root,id));
+const stores=fs.readdirSync(path.join(repo,'stores'),{withFileTypes:true}).filter(e=>e.isDirectory()).map(e=>e.name).sort();
+const configs=Object.fromEntries(stores.map(id=>[id,JSON.parse(fs.readFileSync(path.join(repo,'stores',id,'store.json'),'utf8'))]));
+for(const id of stores)buildStore(id,path.join(root,id));
 const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500"><rect width="400" height="500" fill="#dedede"/></svg>';
 const columns = ['id','nombre','precio','activo','categoria','opciones_1_nombre','opciones_1_valores','opciones_2_nombre','opciones_2_valores','modo_imagenes','imagenes_labels','imagen_1','imagen_2','imagen_3','imagen_4'];
 const row = overrides => ({id:'p1',nombre:'Producto',precio:'890.50',activo:'SI',categoria:"Niño's",opciones_1_nombre:'Talle',opciones_1_valores:'S;M',opciones_2_nombre:'Color',opciones_2_valores:'Negro;Blanco',modo_imagenes:'color_galeria',imagenes_labels:'Frente;Atrás',imagen_1:'https://images.test/a.svg',imagen_2:'https://images.test/b.svg',imagen_3:'https://images.test/c.svg',imagen_4:'https://images.test/d.svg',...overrides});
@@ -19,13 +21,13 @@ async function main() {
     const file = path.resolve(servingRoot, '.' + decodeURIComponent(req.url.split('?')[0]));
     if (file !== servingRoot && !file.startsWith(servingRoot+path.sep)) { res.writeHead(403);return res.end(); }
     try { const p=fs.statSync(file).isDirectory()?path.join(file,'index.html'):file;
-      res.setHeader('Content-Type',p.endsWith('.js')?'text/javascript':p.endsWith('.css')?'text/css':'text/html');res.end(fs.readFileSync(p));
+      res.setHeader('Content-Type',p.endsWith('.js')?'text/javascript':p.endsWith('.css')?'text/css':p.endsWith('.svg')?'image/svg+xml':'text/html');res.end(fs.readFileSync(p));
     } catch {res.writeHead(404);res.end();}
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   browser = await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE}:{})});
   const base=`http://127.0.0.1:${server.address().port}`;
-  for(const folder of ['luna-urban','pasteleria-demo','catalogo-base','casa-verde']) {
+  for(const folder of stores) {
     const context=await browser.newContext({viewport:{width:1366,height:768}});
     const page=await context.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
     let body=csv([row()]),fail=false,delay=0;
@@ -70,7 +72,7 @@ async function main() {
     await page.locator('.detail-link').click();await page.getByRole('button',{name:hostile,exact:true}).click();
     assert.equal(await page.evaluate(()=>selectedOptions.color),hostile);assert.equal(await page.evaluate(()=>window.__attack),undefined);
     await page.locator('[data-action="cart-add"]').click();
-    if(folder!=='luna-urban'){
+    if(configs[folder].config.behavior.openCartAfterAdd){
       await page.waitForFunction(()=>document.getElementById('cartDrawer').classList.contains('open'));
       await page.getByRole('button',{name:'Cerrar pedido',exact:true}).click();
     }
@@ -89,23 +91,39 @@ async function main() {
     assert.deepEqual(errors,[]);passed++;console.log(`PASS ${folder}: UI, variants, persistence, refresh, empty/error/retry, hostile text, mobile`);
     await context.close();
   }
-  const {buildStore:exportStore}=require('../tools/build-store.cjs');
-  const target=path.join(fs.mkdtempSync(path.join(os.tmpdir(),'pedido-listo-browser-')),'catalog');
-  exportStore('luna-urban',target);servingRoot=target;
-  const packaged=await browser.newPage();const packagedErrors=[];
-  packaged.on('pageerror',error=>packagedErrors.push(error.message));
-  await packaged.route(/https:\/\/docs.google.com\/spreadsheets\//,route=>route.fulfill({contentType:'text/csv',body:csv([row()])}));
-  await packaged.route(/https:\/\/(?:images\.test|images\.unsplash\.com)\//,route=>route.fulfill({contentType:'image/svg+xml',body:svg}));
-  await packaged.goto(base+'/',{waitUntil:'domcontentloaded'});await packaged.waitForFunction(()=>catalogState.status==='ready');
-  assert.equal(await packaged.locator('.product-card').count(),1);assert.deepEqual(packagedErrors,[]);await packaged.close();
-  console.log('PASS standalone export served from its own root');
-  if(process.argv.includes('--live')){
-    servingRoot=root;
-    const live=await browser.newPage();await live.route('https://images.unsplash.com/**',route=>route.fulfill({contentType:'image/svg+xml',body:svg}));
-    await live.goto(base+'/demos/ropa/',{waitUntil:'domcontentloaded'});await live.waitForFunction(()=>['ready','error'].includes(catalogState.status));
-    const result=await live.evaluate(()=>({state:catalogState,count:catalogProducts.length,ids:catalogProducts.map(p=>p.id)}));
-    console.log('LIVE read-only Google Sheets:',JSON.stringify(result));assert.equal(result.state.status,'ready');assert.ok(result.ids.every(id=>id.startsWith('ropa-')));await live.close();
+  for(const id of stores){
+    const count=configs[id].source.mode==='sheet'?1:JSON.parse(fs.readFileSync(path.join(repo,'stores',id,'products.json'),'utf8')).filter(p=>p&&p.available!==false).length;
+    servingRoot=path.join(root,id);
+    const packaged=await browser.newPage();const packagedErrors=[];
+    packaged.on('pageerror',error=>packagedErrors.push(error.message));
+    packaged.on('response',res=>{if(res.url().startsWith(base)&&res.status()>=400)packagedErrors.push(res.url());});
+    await packaged.route('**/*',route=>{
+      const url=route.request().url();
+      if(url.startsWith(base))return route.continue();
+      if(url.startsWith('https://docs.google.com/'))return route.fulfill({contentType:'text/csv',body:csv([row()])});
+      if(/^https:\/\/(images\.test|images\.unsplash\.com)\//.test(url))return route.fulfill({contentType:'image/svg+xml',body:svg});
+      return route.abort();
+    });
+    await packaged.addInitScript(()=>{window.open=()=>{throw new Error('Unexpected real order');};});
+    for(const width of [1366,375]){
+      await packaged.setViewportSize({width,height:width===375?667:768});
+      await packaged.goto(base+'/',{waitUntil:'domcontentloaded'});await packaged.waitForFunction(()=>catalogState.status==='ready');
+      assert.equal(await packaged.locator('.product-card').count(),count);
+      const screenshotDir=path.join(repo,'work/phase2-visual');fs.mkdirSync(screenshotDir,{recursive:true});
+      await packaged.screenshot({path:path.join(screenshotDir,`${id}-${width}-catalog-current.png`),animations:'disabled'});
+      const geometry=await packaged.locator('.product-card').evaluateAll(cards=>cards.map(card=>({width:card.getBoundingClientRect().width,height:card.getBoundingClientRect().height})));
+      fs.writeFileSync(path.join(screenshotDir,`${id}-${width}-layout.json`),JSON.stringify(geometry,null,2));
+      if(count){
+        await packaged.locator('.detail-link').first().click();
+        await packaged.locator('[data-action="cart-add"]').click();
+        assert.equal(await packaged.evaluate(()=>cart.length),1);
+        if(id==='casa-verde')assert.equal(await packaged.evaluate(()=>cart[0].id),'cv-001');
+      }
+      await packaged.screenshot({path:path.join(screenshotDir,`${id}-${width}-independent.png`),animations:'disabled'});
+    }
+    assert.deepEqual(packagedErrors,[]);await packaged.close();
+    console.log(`PASS independent root ${id}: real local configuration, desktop and mobile`);
   }
-  console.log(`Browser scenarios passed: ${passed}/4 + standalone (no real WhatsApp requests)`);
+  console.log(`Browser scenarios passed: ${passed}/${stores.length} + ${stores.length} independent roots (no real WhatsApp requests)`);
 }
 main().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(resolve=>server.close(resolve));});

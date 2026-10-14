@@ -1,0 +1,8 @@
+# Seleccionar esta carpeta como Package directory; base = raíz del repositorio.
+[build]
+  base = ""
+  command = "node tools/build-release.cjs casa-verde"
+  publish = "dist/casa-verde"
+  ignore = "node tools/ignore-build.cjs casa-verde"
+[build.environment]
+  NODE_VERSION = "24"
