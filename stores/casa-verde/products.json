@@ -1,0 +1,20 @@
+[
+  {
+    "id": "cv-001",
+    "name": "Planta de interior",
+    "category": "Plantas",
+    "price": 450,
+    "image": "assets/planta.svg",
+    "available": true,
+    "optionGroups": [
+      {
+        "id": "maceta",
+        "label": "Maceta",
+        "options": [
+          "Barro",
+          "Blanca"
+        ]
+      }
+    ]
+  }
+]

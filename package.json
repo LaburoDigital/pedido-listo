@@ -1,0 +1,9 @@
+{
+  "name": "pedido-listo",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "test:browser": "node tests/browser-shared.cjs && node tests/browser-parity.cjs"
+  },
+  "engines": { "node": ">=22" }
+}

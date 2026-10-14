@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ropa-001",
+    "names": [
+      "Remera oversize"
+    ],
+    "cartIds": [
+      "remera-oversize-1"
+    ]
+  },
+  {
+    "id": "ropa-002",
+    "names": [
+      "Jean recto azul"
+    ],
+    "cartIds": [
+      "jean-recto-azul-2"
+    ]
+  },
+  {
+    "id": "ropa-003",
+    "names": [
+      "Campera urbana beige"
+    ],
+    "cartIds": [
+      "campera-urbana-beige-3"
+    ]
+  },
+  {
+    "id": "ropa-004",
+    "names": [
+      "Gorra clásica"
+    ],
+    "cartIds": [
+      "gorra-clasica-4"
+    ]
+  },
+  {
+    "id": "ropa-005",
+    "names": [
+      "Pack básico urbano"
+    ],
+    "cartIds": [
+      "pack-basico-urbano-5"
+    ]
+  }
+]
