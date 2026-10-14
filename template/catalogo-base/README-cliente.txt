@@ -30,11 +30,11 @@ robots.txt / sitemap.xml
 
 CÓMO ADAPTAR A UN CLIENTE
 
-1. Duplicar la carpeta completa.
+1. Usar una exportación completa que incluya shared/catalog-core.js. No copiar solo la carpeta de la plantilla del repositorio.
 2. Cambiar el nombre de la carpeta.
 3. Editar config.js.
 4. Editar products.js.
-5. Abrir index.html y probar.
+5. En una exportación independiente, abrir index.html o servir esa carpeta. En el repositorio, servir su raíz y abrir /template/catalogo-base/.
 6. Revisar en modo celular.
 7. Probar detalle de producto.
 8. Probar pedido por WhatsApp.

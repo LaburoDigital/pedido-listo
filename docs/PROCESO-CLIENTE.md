@@ -38,7 +38,7 @@ Pedir:
 
 ## 6. Producción
 
-Duplicar plantilla. Adaptar `config.js` y `products.js`. Tocar `app.js` solo si el rubro lo exige.
+Exportar la plantilla con `node tools/export-catalog.cjs template/catalogo-base RUTA_NUEVA` desde la raíz del proyecto para incluir el motor común. Adaptar `config.js` y la fuente de productos. Tocar `app.js` solo si el rubro lo exige. No copiar únicamente la carpeta de la demo.
 
 ## 7. QA
 

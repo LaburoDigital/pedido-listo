@@ -39,6 +39,7 @@ const DATA_SOURCE = {
 ## Columnas esperadas
 
 ```text
+id
 activo
 destacado
 oferta
@@ -63,10 +64,18 @@ nota
 ## Reglas para el cliente
 
 - No cambiar nombres de columnas.
+- Cada producto debe tener un `id` único y permanente. No cambia al renombrar el producto o mover filas; no se reutiliza para otro producto.
+- Precios obligatorios y no negativos, sin símbolos de moneda. Se aceptan `890`, `890.50`, `890,50`, `1.890` y `1.890,50`. Una coma seguida de tres decimales (`1,890`) se rechaza por ambigua. `precio_anterior` es opcional; si se completa, usa las mismas reglas.
 - Usar `SI` o `NO` en activo, destacado, oferta y disponible.
 - Poner imágenes como links públicos.
 - Separar talles/colores con coma: `S,M,L,XL`.
 - No poner datos privados en la planilla porque se publica para lectura.
+
+## Compatibilidad y fallos
+
+La planilla de ropa actual tiene una tabla temporal de equivalencias en `demos/ropa/data-source.js`; no fue modificada durante la fase 1. Ver la tabla de IDs y el procedimiento en [FASE-1-ESTABILIZACION.md](FASE-1-ESTABILIZACION.md). Agregar IDs antes de crear o renombrar productos; el sistema no inventa identidades desde el nombre ni la posición.
+
+Una planilla válida sin productos activos muestra el catálogo vacío. Si la conexión falla o un dato activo es inválido, aparece un error con reintento: **no se usan productos ni precios de ejemplo como respaldo**. El pedido guardado se conserva mientras no se pueda comprobar la fuente.
 
 ## Riesgo técnico
 

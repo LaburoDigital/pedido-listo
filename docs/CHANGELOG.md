@@ -1,5 +1,15 @@
 # Changelog
 
+## Fase 1 — Estabilización
+
+- Catálogo vacío válido y error con reintento; se elimina el respaldo de ejemplos en modo Sheets.
+- Validación compartida de CSV, precios, IDs, opciones y carritos.
+- IDs explícitos y puente de migración para los cinco productos actuales de ropa.
+- Eventos seguros con atributos de datos, sin manejadores inline.
+- Comprobación fresca del catálogo antes de preparar WhatsApp, con revisión obligatoria ante cambios y protección frente a reintentos simultáneos.
+- Exportación independiente que incluye el motor común, sin publicar ni sobrescribir destinos.
+- Pruebas automatizadas y documentación de contratos y migración.
+
 ## v0.9.1 — Color + vistas separadas
 
 - Agrega soporte para `modo_imagenes = color_galeria`.

@@ -1,10 +1,12 @@
-# QA Checklist — Pedido Listo v0.9.1
+# QA Checklist — Pedido Listo v0.9.1 + estabilización
 
 ## Carga general
 
 - [ ] La web carga sin errores rojos en consola.
 - [ ] Los productos cargan desde Google Sheets.
-- [ ] Si Google Sheets falla, usa el respaldo local.
+- [ ] Si Google Sheets falla, aparece un error con reintento y no se muestran ejemplos.
+- [ ] Una planilla válida sin productos activos muestra catálogo vacío.
+- [ ] Los productos tienen IDs estables y precios válidos.
 - [ ] Las categorías filtran correctamente.
 
 ## Producto con `modo_imagenes = color`
@@ -38,6 +40,16 @@
 - [ ] Cantidades suman bien.
 - [ ] Quitar productos funciona.
 - [ ] El mensaje de WhatsApp se arma completo.
+- [ ] Productos y variantes eliminados no pueden pedirse.
+- [ ] Cambios de precios requieren revisar el pedido antes de abrir WhatsApp.
+- [ ] Un fallo de la planilla conserva el carrito y bloquea la preparación del mensaje.
+- [ ] Un carrito guardado inválido no rompe la página.
+
+## Entrega técnica
+
+- [ ] Las pruebas de Node y de navegador pasan.
+- [ ] La exportación independiente incluye `shared/catalog-core.js` y carga desde su propia raíz.
+- [ ] Las comprobaciones no editan la planilla real ni envían pedidos reales.
 
 ## Responsive
 
