@@ -1,0 +1,6 @@
+build/
+evidence/
+.env
+.env.*
+!.env.example
+*.local.json

@@ -1,0 +1,19 @@
+{
+  "name": "pedido-listo-admin-foundation",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "test:integration": "node --test --test-concurrency=1 tests/*.integration.mjs",
+    "seed:local": "node scripts/seed-local.mjs",
+    "panel": "node scripts/start-panel.cjs",
+    "test:panel": "node tests/panel-browser.cjs",
+    "test:stability": "node tests/panel-stability-browser.cjs"
+  },
+  "devDependencies": {
+    "supabase": "2.121.0"
+  }
+}

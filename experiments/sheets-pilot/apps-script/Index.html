@@ -1,0 +1,22 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base target="_top"><title>Pedido Listo — Piloto</title>
+<style>/*PANEL_STYLE*/
+body{background:#f7f8fa}.pilot{max-width:850px;margin:auto;padding:20px}.pilot h1{font-size:28px}.pilot form{margin:20px 0}.pilot button{margin:5px 5px 5px 0;min-height:44px}.pilot input,.pilot textarea,.pilot select{width:100%;max-width:100%;box-sizing:border-box}.pilot label{display:block;margin-top:12px}.pilot .photo{width:110px;height:110px;object-fit:contain}.pilot .row{display:flex;gap:12px;flex-wrap:wrap}.pilot .row>div{flex:1;min-width:200px}.pilot [hidden]{display:none!important}.pilot .error{white-space:pre-wrap}.pilot output{display:block;overflow-wrap:anywhere}</style></head>
+<body><main class="pilot"><p class="tag">PILOTO FICTICIO · NO COMERCIAL</p><h1>Productos de prueba</h1><p>Acceso con tu cuenta Google. No ingreses datos reales. Guardar y publicar son pasos diferentes.</p>
+<p id="message" role="status" aria-live="polite">Cargando desde Google…</p><p id="error" class="error" role="alert"></p>
+<div><button id="refresh" type="button">Recargar catálogo</button><button id="new" type="button">Nuevo producto</button><button id="publish" type="button">Publicar catálogo guardado</button><button id="verify" type="button">Comprobar publicación</button></div>
+<div id="products"></div>
+<form id="editor" class="form-card"><h2 id="editor-title">Nuevo producto</h2>
+<label for="name">Nombre</label><input id="name" maxlength="200" required>
+<div class="row"><div><label for="price">Precio (ejemplo: 890,50)</label><input id="price" inputmode="decimal" required></div><div><label for="state">Estado</label><select id="state"><option value="active">Activo</option><option value="inactive">Inactivo</option><option value="draft">Borrador</option></select></div></div>
+<label for="description">Descripción</label><textarea id="description" maxlength="2000" rows="3"></textarea>
+<div class="row"><div><label for="colors">Colores — uno por línea</label><textarea id="colors" rows="3"></textarea></div><div><label for="sizes">Talles — uno por línea</label><textarea id="sizes" rows="3"></textarea></div></div>
+<p>En el piloto, conservá los colores una vez que tengan fotos. Los signos «;» forman parte de una opción.</p>
+<button type="submit">Guardar producto</button><button id="reload" type="button" hidden>Recargar producto actual</button><output id="revision"></output>
+</form>
+<form id="photo-form" class="form-card" hidden><h2>Fotografía por color</h2><p>Una foto por color en este piloto. Elegí JPG o PNG de hasta 2 MB. Guardá primero los cambios del producto.</p>
+<input name="productId" type="hidden"><input name="revision" type="hidden">
+<label for="photo-color">Color de la fotografía</label><select id="photo-color" name="color"></select>
+<label for="photo">Fotografía</label><input id="photo" name="photo" type="file" accept="image/jpeg,image/png" required>
+<button type="submit">Subir y asociar fotografía</button><div id="photos"></div></form>
+<p>Si una operación queda sin respuesta, recargá y comprobá qué se guardó antes de repetirla. Para salir de la cuenta, usá los controles de Google; cerrar esta pestaña no cierra tu sesión Google.</p>
+</main><script>/*PANEL_SCRIPT*/</script></body></html>

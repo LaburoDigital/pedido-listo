@@ -1,0 +1,44 @@
+{
+  "stores": [
+    {"id":"11111111-1111-4111-8111-111111111111","name":"Ropa ficticia A","slug":"prueba-ropa-a"},
+    {"id":"22222222-2222-4222-8222-222222222222","name":"Accesorios ficticios B","slug":"prueba-accesorios-b"}
+  ],
+  "users": [
+    {"email":"comercio-a@example.test","store_id":"11111111-1111-4111-8111-111111111111"},
+    {"email":"comercio-b@example.test","store_id":"22222222-2222-4222-8222-222222222222"}
+  ],
+  "products": [
+    {
+      "store_id":"11111111-1111-4111-8111-111111111111",
+      "id":"ropa-001","name":"Remera de prueba","price":"890.50","old_price":"990.00",
+      "is_draft":false,"available":true,
+      "option_groups":[
+        {"id":"talle","label":"Talle","options":["S","M"]},
+        {"id":"color","label":"Color","options":["Negro","Blanco"]},
+        {"id":"vista","label":"Vista","options":["Frente","Atrás"]}
+      ],
+      "catalog_data":{
+        "category":"Remeras","short":"Producto ficticio","description":"No está a la venta.",
+        "image":"https://catalog.example.test/negro-frente.webp",
+        "gallery":["https://catalog.example.test/negro-atras.webp","https://catalog.example.test/blanco-frente.webp","https://catalog.example.test/blanco-atras.webp"],
+        "images":[],"mediaMode":"color_galeria","imageLabels":["Frente","Atrás"],
+        "imagePosition":"center top","imageFit":"contain","badge":"Prueba",
+        "tags":["Ficticio"],"featured":true,"offer":true,"layout":"featured","order":1,"pricePrefix":"Desde"
+      },
+      "legacy_cart_ids":["remera-oversize-1"],"legacy_names":["Remera oversize"]
+    },
+    {
+      "store_id":"22222222-2222-4222-8222-222222222222",
+      "id":"ropa-001","name":"Bolso de prueba B","price":"450.00","old_price":null,
+      "is_draft":false,"available":true,
+      "option_groups":[{"id":"color","label":"Color","options":["Azul","Verde"]}],
+      "catalog_data":{"category":"Bolsos","mediaMode":"color","image":"https://catalog.example.test/azul.webp","gallery":["https://catalog.example.test/verde.webp"]},
+      "legacy_cart_ids":[],"legacy_names":[]
+    },
+    {
+      "store_id":"11111111-1111-4111-8111-111111111111",
+      "id":"borrador-001","name":"","price":null,"old_price":null,
+      "is_draft":true,"available":false,"option_groups":[],"catalog_data":{},"legacy_cart_ids":[],"legacy_names":[]
+    }
+  ]
+}
