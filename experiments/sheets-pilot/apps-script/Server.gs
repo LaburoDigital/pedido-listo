@@ -46,34 +46,55 @@ function verifyPublication(){
  const current=state_();
  return {version:observed.version,status:JSON.stringify(observed)===JSON.stringify(intended)?'published':'pending',hasUnpublishedChanges:observed.version!=='catalog-'+current.version};
 }
-function uploadPhoto(form){
- owner_();const id=form.productId,expected=Number(form.revision),color=form.color;
+const PHOTO_MAX_BYTES_=2*1024*1024;
+// Base64 of PHOTO_MAX_BYTES_ is at most this many characters (4 per 3 bytes, padded).
+const PHOTO_MAX_BASE64_=Math.ceil(PHOTO_MAX_BYTES_/3)*4;
+function photoMime_(bytes){
+ const unsigned=bytes.map(b=>b&255);
+ if(unsigned[0]===255&&unsigned[1]===216&&unsigned[2]===255)return 'image/jpeg';
+ if([137,80,78,71,13,10,26,10].every((b,i)=>unsigned[i]===b))return 'image/png';
+ return null;
+}
+// Shared path for both entry points. Identity, revision and color are checked BEFORE any external call.
+function storePhoto_(id,expected,color,bytes){
+ owner_();
  const original=locked_(()=>locate_(state_(),id));SheetsPilot.revision(original,expected);
  if(typeof color!=='string')throw Error('Elegí el color.');
- // Validate association before making a billable/external call.
  SheetsPilot.attach(original,expected,{id:'validation',productId:id,color,url:'https://ik.imagekit.io/validation/image.jpg'});
- const blob=form.photo;if(!blob||typeof blob.getBytes!=='function')throw Error('Seleccioná una fotografía.');
- const bytes=blob.getBytes(),unsigned=bytes.map(b=>b&255);
- const jpeg=unsigned[0]===255&&unsigned[1]===216&&unsigned[2]===255;
- const png=[137,80,78,71,13,10,26,10].every((b,i)=>unsigned[i]===b);
- const mime=jpeg?'image/jpeg':png?'image/png':null;
- if(!mime||bytes.length>2*1024*1024||bytes.length<16)throw Error('Usá una foto JPG o PNG de hasta 2 MB para este piloto.');
+ // Never trust the browser-declared type: decide by file signature and real size.
+ const mime=photoMime_(bytes);
+ if(!mime||bytes.length>PHOTO_MAX_BYTES_||bytes.length<16)throw Error('La foto no es una imagen JPG/PNG válida de hasta 2 MB. No se guardó nada.');
  const endpoint=property_('IMAGEKIT_URL_ENDPOINT');
  if(!/^https:\/\/ik\.imagekit\.io\/[a-zA-Z0-9_-]+\/?$/.test(endpoint))throw Error('Endpoint de imágenes inválido.');
+ const extension=mime==='image/jpeg'?'jpg':'png';
  const response=UrlFetchApp.fetch('https://upload.imagekit.io/api/v1/files/upload',{
   method:'post',muteHttpExceptions:true,
   headers:{Authorization:'Basic '+Utilities.base64Encode(property_('IMAGEKIT_PRIVATE_KEY')+':')},
-  payload:{file:Utilities.newBlob(bytes,mime,'photo.'+(jpeg?'jpg':'png')),fileName:Utilities.getUuid()+'.'+(jpeg?'jpg':'png'),folder:'/pedido-listo-piloto/'+id,useUniqueFileName:'true'}
+  payload:{file:Utilities.newBlob(bytes,mime,'photo.'+extension),fileName:Utilities.getUuid()+'.'+extension,folder:'/pedido-listo-piloto/'+id,useUniqueFileName:'true'}
  });
- if(response.getResponseCode()<200||response.getResponseCode()>=300)throw Error('ImageKit rechazó la carga. Revisá la cuenta y su cuota.');
- let file;try{file=JSON.parse(response.getContentText());}catch(_){throw Error('Respuesta de imágenes inválida.');}
- if(typeof file.url!=='string'||!file.url.startsWith(endpoint.replace(/\/$/,'')+'/')||typeof file.fileId!=='string')throw Error('ImageKit devolvió una referencia inesperada.');
+ if(response.getResponseCode()<200||response.getResponseCode()>=300)throw Error('ImageKit rechazó la carga. Revisá la cuenta y su cuota. No se asoció ninguna foto.');
+ let file;try{file=JSON.parse(response.getContentText());}catch(_){throw Error('Respuesta de imágenes inválida. No se asoció ninguna foto.');}
+ if(typeof file.url!=='string'||!file.url.startsWith(endpoint.replace(/\/$/,'')+'/')||typeof file.fileId!=='string')throw Error('ImageKit devolvió una referencia inesperada. No se asoció ninguna foto.');
  // Never hold a Sheets lock during network upload. Recheck revision before association.
  try{return locked_(()=>{
   const data=state_(),row=locate_(data,id);
   const next=SheetsPilot.attach(row,expected,{id:file.fileId,productId:id,color,url:file.url});
   data.rows[data.rows.indexOf(row)]=next;data.version++;write_(data);return {row:next,version:data.version};
  });}catch(error){throw Error('La foto se subió, pero NO se asoció al producto. '+(String(error.message).includes('CONFLICT')?'CONFLICT: recargá el producto.':'Revisá el estado antes de reintentar.')+' Puede quedar un archivo huérfano en la carpeta del piloto.');}
+}
+// Original entry point (form with a file). Kept for compatibility with deployment v1.
+function uploadPhoto(form){
+ owner_();const blob=form.photo;if(!blob||typeof blob.getBytes!=='function')throw Error('Seleccioná una fotografía.');
+ return storePhoto_(form.productId,Number(form.revision),form.color,blob.getBytes());
+}
+// Entry point for photos already reduced and converted to JPEG in the browser.
+function uploadPhotoData(payload){
+ owner_();
+ if(!payload||typeof payload!=='object')throw Error('Datos de foto inválidos. No se guardó nada.');
+ const data=payload.data;
+ if(typeof data!=='string'||data.length<24||data.length>PHOTO_MAX_BASE64_||data.length%4!==0||!/^[A-Za-z0-9+\/]+={0,2}$/.test(data))throw Error('Datos de foto inválidos o demasiado grandes. No se guardó nada.');
+ let bytes;try{bytes=Utilities.base64Decode(data);}catch(_){throw Error('Datos de foto inválidos. No se guardó nada.');}
+ return storePhoto_(payload.productId,Number(payload.revision),payload.color,bytes);
 }
 // Run manually in the Apps Script editor only, AFTER reviewing and authorizing scopes.
 function setupPilot(){

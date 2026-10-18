@@ -8,9 +8,9 @@ const call=(name,arg)=>new Promise((resolve,reject)=>{
 });
 function message(text){$('message').textContent=text;}
 async function run(operation){
- if(busy)return;busy=true;$('error').textContent='';document.querySelectorAll('button').forEach(b=>b.disabled=true);
+ if(busy)return;busy=true;$('error').textContent='';document.querySelectorAll('button,input,select,textarea').forEach(b=>b.disabled=true);
  try{await operation();}catch(error){message('Operación no confirmada.');$('error').textContent=error.message||'La operación no respondió. Recargá antes de repetirla.';if(String(error.message).includes('CONFLICT'))$('reload').hidden=!selected;}
- finally{busy=false;document.querySelectorAll('button').forEach(b=>b.disabled=false);}
+ finally{busy=false;document.querySelectorAll('button,input,select,textarea').forEach(b=>b.disabled=false);}
 }
 function discard(){return !dirty||confirm('Tenés cambios sin guardar. ¿Querés descartarlos y recargar?');}
 function openRow(row){
@@ -37,11 +37,21 @@ $('editor').addEventListener('submit',event=>{event.preventDefault();run(async()
  PanelModel.prepare(input,selected);const command={input};if(selected){command.id=selected.id;command.revision=selected.revision;}
  const result=await call('saveProduct',command);await refresh(result.row.id);message('Guardado. Todavía no publicado.');
 });});
-$('photo-form').addEventListener('submit',event=>{event.preventDefault();run(async()=>{
- if(dirty)throw Error('Guardá los cambios del producto antes de subir la fotografía.');
- const file=$('photo').files[0];if(!file||!['image/jpeg','image/png'].includes(file.type)||file.size>2*1024*1024)throw Error('Elegí JPG o PNG de hasta 2 MB. HEIC y archivos mayores quedan fuera del piloto.');
- message('Subiendo fotografía…');const result=await call('uploadPhoto',$('photo-form'));$('photo').value='';await refresh(result.row.id);message('Fotografía guardada y asociada. Todavía no publicada.');
-});});
+$('photo-form').addEventListener('submit',event=>{event.preventDefault();if(busy)return;
+ // Fijar producto, revisión y color AL INICIO: cambios posteriores en pantalla no alteran la asociación.
+ const form=$('photo-form'),target={productId:form.elements.productId.value,revision:Number(form.elements.revision.value),color:form.elements.color.value};
+ const file=$('photo').files[0];
+ run(async()=>{
+  if(dirty)throw Error('Guardá los cambios del producto antes de subir la fotografía.');
+  if(!target.productId)throw Error('Primero guardá el producto.');
+  message('Procesando foto…');
+  const prepared=await PilotPhoto.prepare(file);
+  message('Subiendo foto ('+Math.round(prepared.bytes/1024)+' KB)…');
+  const result=await call('uploadPhotoData',{...target,data:prepared.data});
+  $('photo').value='';await refresh(result.row.id);
+  message('Foto guardada y asociada a '+(target.color||'foto general')+'. Todavía no publicada.');
+ });
+});
 $('publish').addEventListener('click',()=>run(async()=>{
  if(dirty)throw Error('Guardá o descartá los cambios antes de publicar.');
  if(version===null)throw Error('Primero cargá el catálogo.');
