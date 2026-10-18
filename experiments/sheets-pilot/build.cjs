@@ -8,7 +8,7 @@ function build(){
  const output=path.join(__dirname,'build',new Date().toISOString().replace(/[:.]/g,'-'));fs.mkdirSync(output,{recursive:true});
  const server='const structuredClone = value => JSON.parse(JSON.stringify(value));\n'+shared+'\n'+read('experiments/sheets-pilot/domain.js')+'\n'+read('experiments/sheets-pilot/provider.js')+'\n'+read('experiments/sheets-pilot/apps-script/Server.gs');
  fs.writeFileSync(path.join(output,'Code.gs'),server);
- const html=read('experiments/sheets-pilot/apps-script/Index.html').replace('/*PANEL_STYLE*/',read('admin-foundation/panel/style.css')).replace('/*PANEL_SCRIPT*/',()=>shared+'\n'+read('experiments/sheets-pilot/panel.js'));
+ const html=read('experiments/sheets-pilot/apps-script/Index.html').replace('/*PANEL_STYLE*/',read('admin-foundation/panel/style.css')).replace('/*PANEL_SCRIPT*/',()=>shared+'\n'+read('experiments/sheets-pilot/photo.js')+'\n'+read('experiments/sheets-pilot/panel.js'));
  fs.writeFileSync(path.join(output,'Index.html'),html);
  fs.copyFileSync(path.join(__dirname,'apps-script/appsscript.json'),path.join(output,'appsscript.json'));
  const site=path.join(output,'site');buildStore('casa-verde',site);

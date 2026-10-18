@@ -13,10 +13,10 @@ body{background:#f7f8fa}.pilot{max-width:850px;margin:auto;padding:20px}.pilot h
 <p>En el piloto, conservá los colores una vez que tengan fotos. Los signos «;» forman parte de una opción.</p>
 <button type="submit">Guardar producto</button><button id="reload" type="button" hidden>Recargar producto actual</button><output id="revision"></output>
 </form>
-<form id="photo-form" class="form-card" hidden><h2>Fotografía por color</h2><p>Una foto por color en este piloto. Elegí JPG o PNG de hasta 2 MB. Guardá primero los cambios del producto.</p>
+<form id="photo-form" class="form-card" hidden><h2>Fotografía por color</h2><p>Una foto por color. Podés sacarla con la cámara o elegirla de la galería: se achica automáticamente antes de subir. Guardá primero los cambios del producto.</p>
 <input name="productId" type="hidden"><input name="revision" type="hidden">
 <label for="photo-color">Color de la fotografía</label><select id="photo-color" name="color"></select>
-<label for="photo">Fotografía</label><input id="photo" name="photo" type="file" accept="image/jpeg,image/png" required>
+<label for="photo">Fotografía</label><input id="photo" name="photo" type="file" accept="image/*" required>
 <button type="submit">Subir y asociar fotografía</button><div id="photos"></div></form>
 <p>Si una operación queda sin respuesta, recargá y comprobá qué se guardó antes de repetirla. Para salir de la cuenta, usá los controles de Google; cerrar esta pestaña no cierra tu sesión Google.</p>
 </main><script>/*PANEL_SCRIPT*/</script></body></html>

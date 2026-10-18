@@ -87,3 +87,19 @@ No usar la vista previa sin Google como evidencia de estas filas. La revisión d
 - Free no garantiza disponibilidad permanente; las cuotas y condiciones deben explicarse al cliente.
 
 **Recomendación provisional:** continuar únicamente con las pruebas reales después de preparar los accesos. No aprobar esta arquitectura comercialmente ni ampliar el panel basándose solo en estos tests locales.
+
+## Fotos desde el celular (rama piloto/fotos-celular)
+
+- El panel acepta cualquier imagen que el navegador pueda abrir (`accept="image/*"`, cámara o galería). `photo.js` la decodifica con el propio navegador (que aplica la orientación EXIF), la reduce a 1600 px de lado largo (1200 px como segundo intento), la convierte a JPEG con calidad decreciente (0,85 → 0,55, cinco intentos como máximo) y exige ≤ 1,5 MB antes de enviarla en base64.
+- Límites de entrada: 25 MB y 60 megapíxeles. Si el navegador no puede abrir el archivo (por ejemplo, algunas HEIC) se muestra un mensaje y no se envía nada. **El soporte HEIC no está declarado: depende del dispositivo y se valida en real.**
+- Servidor: `uploadPhotoData` valida longitud y formato del base64 antes de decodificar, decide el tipo por la firma del archivo (no por lo que dice el navegador), mantiene ≤ 2 MB, y revisa identidad, revisión y color antes de llamar a ImageKit. `uploadPhoto` (formulario) se conserva por compatibilidad con la implementación v1.
+- Durante el procesamiento y la subida se bloquean botones y campos; el producto, la revisión y el color se fijan al iniciar. Ninguna foto se muestra como guardada antes de la respuesta del servidor.
+- Pruebas: `node --test experiments/sheets-pilot/tests/*.test.cjs` (Node, con dobles). En navegador real: `python3 experiments/sheets-pilot/tests/photo-fixtures.py <dir>` y `node experiments/sheets-pilot/tests/photo-browser.cjs <Index.html del build> <dir>` (Chromium; reemplaza `google.script.run` por un doble).
+
+## Limitación conocida: varias cuentas de Google
+
+Con más de una cuenta de Google iniciada en el navegador, Google puede mostrar «No se puede abrir el archivo» aunque la cuenta del piloto sea la dueña. Funciona si la cuenta del comercio es la única o la primera con la que se inició sesión. Alternativa: un perfil de navegador exclusivo para el negocio. No es una experiencia transparente y se documenta como limitación.
+
+## Estado real al 17/10/2026
+
+La autorización, la implementación web v1 («solo yo»), el guardado, el conflicto entre dos pestañas, la publicación y su verificación se probaron contra los servicios reales. Ver `work/fase2-piloto-real/RESULTADOS.txt` (local, fuera de Git). Lo que figura más arriba como «pendiente» quedó desactualizado para esos puntos.
