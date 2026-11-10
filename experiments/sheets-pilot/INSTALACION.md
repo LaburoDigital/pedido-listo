@@ -4,6 +4,20 @@ Objetivo: instalar el piloto para un comercio ficticio nuevo, en cuentas que no 
 
 Reglas: el dueño crea sus cuentas e inicia sesión él mismo. Nunca se pasan contraseñas, códigos ni claves por chat. Sin servicios pagos. Sin datos ni fotos reales. No se tocan el piloto existente, Supabase ni las cuatro tiendas.
 
+## Tiempos: medidos vs estimados
+Los tiempos de la columna "Inicio/Fin" se completan solo con lo observado. Hasta hoy:
+
+| Dato | Valor | Tipo |
+|---|---|---|
+| Subida de una foto desde iPhone (uploadPhotoData) | 2,9 s y 3,2 s | Medido 09/11 |
+| Primera lectura del CSV con la versión nueva tras publicar | 3,7 s | Medido 10/11 (1 medición) |
+| Ventana con lecturas viejas/nuevas alternadas | hasta ~287 s | Medido 10/11 (1 medición) |
+| Pasos 1.x (crear cuentas) | sin dato | Estimación pendiente; no hay medición |
+| Pasos 2.x (Apps Script, OAuth, despliegue, publicar hoja) | sin dato | La primera instalación del piloto no se cronometró |
+| Instalación completa | sin dato | Umbral de decisión: ~2 h (reevaluar precio y alcance si se supera) |
+
+No se usan estimaciones como resultado: cualquier número sin medición queda marcado "Estimación" en la tabla del paso.
+
 ## 0. Preparación (Claude, antes de la sesión)
 - [ ] Paquete generado con `node experiments/sheets-pilot/build.cjs` desde el commit acordado; anotar commit y ruta.
 - [ ] `Code.gs`, `Index.html` y `appsscript.json` listos para copiar y pegar.
@@ -33,7 +47,7 @@ Reglas: el dueño crea sus cuentas e inicia sesión él mismo. Nunca se pasan co
 | 3.1 | Abrir el panel en el celular (método de acceso cotidiano elegido) | | | ¿pidió volver a iniciar sesión? |
 | 3.2 | Crear 1 producto con Color (2) y Talle (2), precio ficticio | | | |
 | 3.3 | Subir 1 foto por color | | | |
-| 3.4 | Publicar y comprobar | | | anotar versión |
+| 3.4 | Publicar y comprobar (esperar ~5 min antes de dar por visible a todos) | | | anotar versión y hora |
 | 3.5 | Tienda (localhost o vista previa) con el CSV nuevo: fotos por color, variantes, carrito, enlace WhatsApp interceptado | | | sin enviar |
 
 ## 4. Aislamiento entre instalaciones (A = piloto actual, B = nueva)
