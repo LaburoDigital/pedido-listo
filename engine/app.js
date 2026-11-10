@@ -621,4 +621,9 @@ function bindCatalogEvents() {
     "cart-clear": () => clearCart(), "send-order": () => sendWhatsApp(),
     "retry-catalog": () => retryCatalog()
   }, typeof handleImageError === "function" ? handleImageError : null);
+  const orderForm = document.getElementById("orderForm");
+  if (orderForm) orderForm.addEventListener("submit", event => {
+    event.preventDefault();
+    sendWhatsApp();
+  });
 }

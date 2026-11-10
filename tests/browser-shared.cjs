@@ -59,6 +59,10 @@ async function main() {
     await page.locator('[data-action="send-order"]').click();await page.waitForFunction(()=>window.__opened.length===1);
     assert.match(await page.evaluate(()=>decodeURIComponent(window.__opened[0])),/Color: Blanco/);
     assert.match(await page.locator('#cartStatus').innerText(),/abrilo aquí/);
+    const beforeEnter=page.url();const textFields=await page.locator('#orderForm input[type="text"]').count();
+    await page.locator('#orderForm input[type="text"]').first().press('Enter');
+    if(textFields===1)await page.waitForFunction(()=>window.__opened.length===2);else await page.waitForTimeout(300);
+    assert.equal(page.url(),beforeEnter,'Enter en el formulario no debe navegar ni poner datos en la URL');
     await page.getByRole('button',{name:'Cerrar pedido',exact:true}).click();
     body=csv([row({activo:'NO'})]);await page.evaluate(()=>retryCatalog());
     assert.equal(await page.locator('.product-card').count(),0);assert.match(await page.locator('#productGrid').innerText(),/No hay productos/);
