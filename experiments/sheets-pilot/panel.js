@@ -55,8 +55,8 @@ $('photo-form').addEventListener('submit',event=>{event.preventDefault();if(busy
 $('publish').addEventListener('click',()=>run(async()=>{
  if(dirty)throw Error('Guardá o descartá los cambios antes de publicar.');
  if(version===null)throw Error('Primero cargá el catálogo.');
- const result=await call('publishCatalog',version);message('Publicación enviada: '+result.version+'. La tienda puede tardar hasta 5 minutos en mostrarla a todos los clientes; mientras tanto algunos pueden ver la versión anterior.');
+ const result=await call('publishCatalog',version);message('Cambios guardados para publicación ('+result.version+'). Pueden tardar varios minutos en aparecer; en nuestras pruebas, alrededor de 5 minutos.');
 }));
-$('verify').addEventListener('click',()=>run(async()=>{const result=await call('verifyPublication');message((result.status==='published'?'Esta comprobación ya ve '+result.version+'. Durante los primeros 5 minutos después de publicar, algunos clientes todavía pueden ver la versión anterior.':'Todavía no visible: esta comprobación ve '+result.version+'. Volvé a comprobar en unos minutos.')+(result.hasUnpublishedChanges?' · Hay cambios privados aún sin publicar.':''));}));
+$('verify').addEventListener('click',()=>run(async()=>{const result=await call('verifyPublication');message((result.status==='published'?'Esta consulta ya recibió '+result.version+'. Otros visitantes pueden seguir viendo la versión anterior durante varios minutos.':'Esta consulta todavía recibió '+result.version+'. Pueden tardar varios minutos; volvé a comprobar más tarde.')+(result.hasUnpublishedChanges?' · Hay cambios privados aún sin publicar.':''));}));
 window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
 run(()=>refresh());
