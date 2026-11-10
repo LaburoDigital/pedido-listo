@@ -59,6 +59,26 @@ async function main() {
     await page.locator('[data-action="send-order"]').click();await page.waitForFunction(()=>window.__opened.length===1);
     assert.match(await page.evaluate(()=>decodeURIComponent(window.__opened[0])),/Color: Blanco/);
     assert.match(await page.locator('#cartStatus').innerText(),/abrilo aquí/);
+    // Enter: mismo camino que el botón, sin navegar ni poner datos personales en la URL.
+    const beforeEnter=page.url();const firstInput=page.locator('#orderForm input').first();
+    await firstInput.press('Enter');await page.waitForFunction(()=>window.__opened.length===2);
+    await page.waitForTimeout(300);assert.equal(page.url(),beforeEnter);assert.doesNotMatch(page.url(),/[?&](nombre|telefono|direccion)=/);
+    assert.match(await page.evaluate(()=>decodeURIComponent(window.__opened[1])),/Color: Blanco/);
+    // Precio actualizado: el primer Enter se detiene y pide revisar; el segundo envía.
+    body=csv([row({precio:'1001'})]);const alertsBefore=await page.evaluate(()=>window.__alerts.length);
+    await firstInput.press('Enter');await page.waitForFunction(n=>window.__alerts.length>n&&window.__alerts.at(-1).includes('catálogo cambió'),alertsBefore);
+    assert.equal(await page.evaluate(()=>window.__opened.length),2);assert.equal(await page.evaluate(()=>cart[0].price),1001);
+    // Una sola ejecución aunque Enter llegue dos veces seguidas.
+    await page.evaluate(()=>{const el=document.querySelector('#orderForm input');for(let i=0;i<2;i++)el.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));});
+    await page.waitForFunction(()=>window.__opened.length===3);await page.waitForTimeout(500);
+    assert.equal(await page.evaluate(()=>window.__opened.length),3);
+    assert.equal(page.url(),beforeEnter);
+    // textarea conserva el salto de línea y no envía.
+    if(await page.locator('#orderForm textarea').count()){
+      const ta=page.locator('#orderForm textarea').first();await ta.fill('Línea 1');await ta.press('Enter');await ta.type('Línea 2');
+      assert.equal(await ta.inputValue(),'Línea 1\nLínea 2');await page.waitForTimeout(300);
+      assert.equal(await page.evaluate(()=>window.__opened.length),3);
+    }
     await page.getByRole('button',{name:'Cerrar pedido',exact:true}).click();
     body=csv([row({activo:'NO'})]);await page.evaluate(()=>retryCatalog());
     assert.equal(await page.locator('.product-card').count(),0);assert.match(await page.locator('#productGrid').innerText(),/No hay productos/);

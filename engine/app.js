@@ -621,4 +621,19 @@ function bindCatalogEvents() {
     "cart-clear": () => clearCart(), "send-order": () => sendWhatsApp(),
     "retry-catalog": () => retryCatalog()
   }, typeof handleImageError === "function" ? handleImageError : null);
+  const orderForm = document.getElementById("orderForm");
+  if (!orderForm) return;
+  // Enter en un campo de una línea usa el mismo camino que el botón de WhatsApp.
+  // textarea conserva el salto de línea; select y botones mantienen su comportamiento.
+  orderForm.addEventListener("keydown", event => {
+    if (event.key !== "Enter" || event.isComposing || event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (!(event.target instanceof HTMLInputElement)) return;
+    event.preventDefault();
+    if (!event.repeat) sendWhatsApp();
+  });
+  // Respaldo (por ejemplo, teclados que envían el formulario sin keydown): nunca navegar.
+  orderForm.addEventListener("submit", event => {
+    event.preventDefault();
+    sendWhatsApp();
+  });
 }
